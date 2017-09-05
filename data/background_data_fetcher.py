@@ -13,6 +13,11 @@ def __get_currency(market):
     return market.replace("BTC-", "")
 
 
+def __get_total(aggregated_data):
+    total_profit = sum(map(lambda x: x[2], aggregated_data))
+    return ['TOTAL', '', total_profit]
+
+
 def get_aggregated_data():
     orders = get_order_history().copy()
     btc_orders = convert_orders_to_btc(orders)
@@ -32,6 +37,8 @@ def get_aggregated_data():
         sell_profit = get_sell_profit(currency_orders)
 
         aggregated_data += [[currency, gain, sell_profit]]
+
+    aggregated_data += [__get_total(aggregated_data)]
 
     return aggregated_data
 

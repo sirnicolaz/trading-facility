@@ -6,6 +6,16 @@ class CoinsStatusGrid(npyscreen.GridColTitles):
         data = list(sum(new_data, []))
         self.set_grid_values_from_flat_list(new_values=data, reset_cursor=False)
 
+    def custom_print_cell(self, actual_cell, cell_display_value):
+        try:
+            value = float(cell_display_value)
+            if value < 0.0:
+                actual_cell.color = 'DANGER'
+            else:
+                actual_cell.color = 'GOOD'
+        except ValueError:
+            actual_cell.color = 'DEFAULT'
+
 
 class CoinsStatus(npyscreen.Form):
     def __init__(self, data_producer, *args, **kwargs):
@@ -21,7 +31,8 @@ class CoinsStatus(npyscreen.Form):
 
     def create(self):
         self.coins = self.add(CoinsStatusGrid, col_titles=["market", "gain", "sell profit (btc)"],
-                              columns=3, values=[["Loading...","Loading..", "Loading..."]])
+                              columns=3, select_whole_line=True, row_height=2,
+                              values=[["Loading...","Loading..", "Loading..."]])
 
 
 class Dashboard(npyscreen.NPSAppManaged):
