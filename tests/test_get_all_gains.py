@@ -5,13 +5,10 @@ from data.gain_calculator import *
 
 class TestGainCalculator(TestCase):
 
-    @patch("data.gain_calculator.get_order_history")
     @patch("data.gain_calculator.get_ticker")
-    @patch("data.gain_calculator.get_balances")
-    def test_get_all_gains(self, mock_get_balances, mock_get_ticker, mock_get_order_history):
-        mock_get_balances.return_value = [{'Currency': 'OMG', 'Balance': 1.0}]
+    def test_get_all_gains(self, mock_get_ticker):
         mock_get_ticker.return_value = self.__mock_ticker()
-        mock_get_order_history.return_value = [{
+        orders = [{
             'OrderType': 'LIMIT_BUY',
             'Exchange': 'BTC-OMG',
             'QuantityRemaining': 0.0,
@@ -20,17 +17,13 @@ class TestGainCalculator(TestCase):
             'PricePerUnit': 0.003
         }]
 
-        gains = get_all_gains()
+        result = get_gain(orders)
 
-        self.assertEqual(1, len(gains))
-        self.assertListEqual(['OMG', 100], gains[0])
+        self.assertEqual(100, result)
 
 
-    @patch("data.gain_calculator.get_order_history")
     @patch("data.gain_calculator.get_ticker")
-    @patch("data.gain_calculator.get_balances")
-    def test_get_gain_for_currency_with_sells(self, mock_get_balances, mock_get_ticker, mock_get_order_history):
-        mock_get_balances.return_value = [{'Currency': 'OMG', 'Balance': 1.0}]
+    def test_get_gain_for_currency_with_sells(self, mock_get_ticker):
         mock_get_ticker.return_value = self.__mock_ticker()
         test_exchange = 'BTC-OMG'
         order_buy_1 = {
@@ -55,12 +48,11 @@ class TestGainCalculator(TestCase):
             'Quantity': 4.0,
             'PricePerUnit': 0.075
         }
-        mock_get_order_history.return_value = [order_buy_1, order_sell, order_buy_2]
-        expected_result = [['OMG', 68.0]]
+        orders = [order_buy_1, order_sell, order_buy_2]
 
-        result = get_all_gains()
+        result = get_gain(orders)
 
-        self.assertListEqual(expected_result, result)
+        self.assertEqual(68.0, result)
 
     def __mock_ticker(self):
         return {'Ask': 0.006, 'Bid': 0.003, 'Last': 0.006}

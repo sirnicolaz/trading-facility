@@ -17,11 +17,8 @@ def __get_current_currencies():
     return [balance['Currency'] for balance in balances]
 
 
-def get_gain_for_currency(buy_orders, currency):
-    if currency == "BTC":
-        return 0
-
-    current_value = get_ticker("BTC-" + currency)['Last']
+def __get_gain_for_currency(buy_orders):
+    current_value = get_ticker(buy_orders[0]['Exchange'])['Last']
 
     total_gain = 0
     total_units = 0
@@ -45,6 +42,12 @@ def get_all_gains():
     data = []
     for currency in currencies:
         currency_orders = list(filter(lambda buy: "-" + currency.lower() in buy['Exchange'].lower(), buy_orders))
-        data += [[currency, get_gain_for_currency(currency_orders, currency)]]
+        data += [[currency, __get_gain_for_currency(currency_orders)]]
 
     return data
+
+
+def get_gain(orders):
+    buy_orders = data_pre_processing.only_buys_with_actual_quantitiy(orders)
+
+    return __get_gain_for_currency(buy_orders)

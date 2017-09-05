@@ -40,7 +40,7 @@ def __subtract_sells_from_buys(sells, buys):
 # and other calculations
 def only_buys_with_actual_quantitiy(orders):
     orders = __repair_quantities(orders)
-    orders = convert_orders_to_btc(orders)
+    #orders = convert_orders_to_btc(orders)
 
     processed_orders = []
     sorted_by_exchange = sorted(orders, key=lambda x: x["Exchange"])
