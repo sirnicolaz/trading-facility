@@ -11,7 +11,7 @@ def get_current_profit(orders, currency):
     # Add artificial sell order to simulate what would be the gain if selling all now
     fake_order = [{
         'OrderType': 'LIMIT_SELL',
-        'ActualQuantity': balance['Available'],
+        'ActualQuantity': balance['Balance'],
         'PricePerUnit': last_price
     }]
 

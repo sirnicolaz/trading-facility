@@ -9,7 +9,7 @@ class TestCurrentProfitCalculator(TestCase):
     @patch("data.current_profit_calculator.get_balance")
     def test_get_current_profit_base_case(self, mock_get_balance, mock_get_ticker):
         mock_get_ticker.return_value = {'Last': 0.4}
-        mock_get_balance.return_value = {'Available': 5.0}
+        mock_get_balance.return_value = {'Balance': 5.0}
 
         orders = [{
             'Exchange': 'BTC-STORJ',
@@ -27,7 +27,7 @@ class TestCurrentProfitCalculator(TestCase):
     @patch("data.current_profit_calculator.get_balance")
     def test_get_current_profit_with_history(self, mock_get_balance, mock_get_ticker):
         mock_get_ticker.return_value = {'Last': 0.4}
-        mock_get_balance.return_value = {'Available': 3.0}
+        mock_get_balance.return_value = {'Balance': 3.0}
 
         orders = [{
             'Exchange': 'BTC-STORJ',
@@ -54,7 +54,7 @@ class TestCurrentProfitCalculator(TestCase):
     @patch("data.current_profit_calculator.get_balance")
     def test_get_current_profit_with_complex_history(self, mock_get_balance, mock_get_ticker):
         mock_get_ticker.return_value = {'Last': 0.4}
-        mock_get_balance.return_value = {'Available': 6.0}
+        mock_get_balance.return_value = {'Balance': 6.0}
 
         orders = [{
             'Exchange': 'BTC-STORJ',
