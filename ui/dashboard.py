@@ -30,9 +30,10 @@ class CoinsStatus(npyscreen.Form):
         self.parentApp.setNextForm(None)
 
     def create(self):
-        self.coins = self.add(CoinsStatusGrid, col_titles=["market", "gain", "sell profit (btc)"],
-                              columns=3, select_whole_line=True, row_height=2,
-                              values=[["Loading...","Loading..", "Loading..."]])
+        self.coins = self.add(CoinsStatusGrid,
+                              col_titles=["market", "gain", "sold profit (btc)", "sell all now profit (btc)"],
+                              columns=4, select_whole_line=True, row_height=2,
+                              values=[["Loading...","Loading...", "Loading...", "Loading..."]])
 
 
 class Dashboard(npyscreen.NPSAppManaged):
