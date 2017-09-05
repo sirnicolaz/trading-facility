@@ -3,6 +3,8 @@ from datetime import datetime
 from functools import lru_cache
 from data.api.request_handler import get
 
+__PRECISION = 15
+
 
 # string format: '2017-09-04T07:51:24.79'
 @lru_cache(maxsize=None)
@@ -17,8 +19,8 @@ def eth_to_btc(time_string):
 
 def __convert_to_btc(order):
     one_eth_value = eth_to_btc(order['Closed'])
-    order['PricePerUnit'] = float(one_eth_value) / float(order['PricePerUnit'])
-    order['Price'] = float(one_eth_value) / float(order['Price'])
+    order['PricePerUnit'] = round(float(order['PricePerUnit']) * float(one_eth_value),__PRECISION)
+    order['Price'] = round(float(order['Price']) * float(one_eth_value), __PRECISION)
     order['Exchange'] = order['Exchange'].replace("ETH-", "BTC-")
 
 
