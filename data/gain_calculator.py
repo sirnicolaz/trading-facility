@@ -1,13 +1,14 @@
 from data import data_pre_processing
 from data.api.public_api import *
 from data.api.account_api import *
+from data.fin_math import percentage_gain
 
 
 def __get_gain_for_order(order, current_value):
     units = order['ActualQuantity']
     buy_price = order['PricePerUnit']
 
-    gain = (current_value * 100.0 / buy_price) - 100.0
+    gain = percentage_gain(current_value, buy_price)
 
     return [gain, units]
 
@@ -33,21 +34,7 @@ def __get_gain_for_currency(buy_orders):
     return overall_gain
 
 
-def get_all_gains():
-    currencies = __get_current_currencies().copy()
-    orders = get_order_history().copy()
-
-    buy_orders = data_pre_processing.only_buys_with_actual_quantitiy(orders)
-
-    data = []
-    for currency in currencies:
-        currency_orders = list(filter(lambda buy: "-" + currency.lower() in buy['Exchange'].lower(), buy_orders))
-        data += [[currency, __get_gain_for_currency(currency_orders)]]
-
-    return data
-
-
 def get_gain(orders):
-    buy_orders = data_pre_processing.only_buys_with_actual_quantitiy(orders)
+    buy_orders = data_pre_processing.squash_sells_into_buys(orders)
 
     return __get_gain_for_currency(buy_orders)

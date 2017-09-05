@@ -38,6 +38,7 @@ class TestGainCalculator(TestCase):
             'OrderType': 'LIMIT_SELL',
             'Exchange': test_exchange,
             'QuantityRemaining': 0.0,
+            'ActualQuantity': 3.0,
             'Quantity': 3
         }
         order_buy_2 = {

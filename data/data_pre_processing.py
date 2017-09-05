@@ -1,10 +1,23 @@
 import copy
 from functools import reduce
-from data.api.conversion_utilities import convert_orders_to_btc
 from itertools import groupby
+from data.order_utilities import *
+
+def __subtract_sells_from_buys(sells, buys):
+    new_buys = copy.deepcopy(buys)
+    sum_sells = reduce(lambda tot, sell: tot + sell['ActualQuantity'], sells, 0)
+    for buy in reversed(new_buys):
+        if sum_sells <= 0:
+            break
+
+        sum_sells -= buy['ActualQuantity']
+        buy['ActualQuantity'] = abs(min(round(sum_sells, 12), 0))
 
 
-def __repair_quantities(orders):
+    return new_buys
+
+
+def with_actual_quantities(orders):
     copy_orders = copy.deepcopy(orders)
     actual_quantity_key = 'ActualQuantity'
 
@@ -22,32 +35,13 @@ def __repair_quantities(orders):
     return copy_orders
 
 
-def __subtract_sells_from_buys(sells, buys):
-    new_buys = copy.deepcopy(buys)
-    sum_sells = reduce(lambda tot, sell: tot + sell['ActualQuantity'], sells, 0)
-    for buy in reversed(new_buys):
-        if sum_sells <= 0:
-            break
-
-        sum_sells -= buy['ActualQuantity']
-        buy['ActualQuantity'] = abs(min(round(sum_sells, 12), 0))
-
-
-    return new_buys
-
-
-# Add on each order the actual amount left from it, after subtracting the ensuing sells
-# and other calculations
-def only_buys_with_actual_quantitiy(orders):
-    orders = __repair_quantities(orders)
-    #orders = convert_orders_to_btc(orders)
-
+def squash_sells_into_buys(orders):
     processed_orders = []
     sorted_by_exchange = sorted(orders, key=lambda x: x["Exchange"])
     for market, group in groupby(sorted_by_exchange, lambda item: item["Exchange"]):
         currency_orders = list(group)
-        currency_sells = list(filter(lambda order: order['OrderType'] == 'LIMIT_SELL', currency_orders))
-        currency_buys = list(filter(lambda order: order['OrderType'] == 'LIMIT_BUY', currency_orders))
+        currency_sells = only_sells(currency_orders)
+        currency_buys = only_buys(currency_orders)
 
         processed_orders += __subtract_sells_from_buys(currency_sells, currency_buys)
 
