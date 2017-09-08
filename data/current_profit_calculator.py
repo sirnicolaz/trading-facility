@@ -1,7 +1,8 @@
-from data.api.account_api import get_balance
-from data.api.public_api import get_ticker
-from data import sell_profit_calculator
+from api.account_api import get_balance
+from api.public_api import get_ticker
 from data import data_pre_processing
+from data import sell_profit_calculator
+
 
 def get_current_profit(orders, currency):
     balance = get_balance(currency)

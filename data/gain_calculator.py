@@ -1,7 +1,6 @@
 from data import data_pre_processing
-from data.api.public_api import *
-from data.api.account_api import *
 from data.fin_math import percentage_gain
+from api.public_api import get_ticker
 
 
 def __get_gain_for_order(order, current_value):
@@ -11,11 +10,6 @@ def __get_gain_for_order(order, current_value):
     gain = percentage_gain(current_value, buy_price)
 
     return [gain, units]
-
-
-def __get_current_currencies():
-    balances = get_balances()
-    return [balance['Currency'] for balance in balances]
 
 
 def __get_gain_for_currency(buy_orders):

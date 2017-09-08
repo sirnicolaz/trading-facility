@@ -1,6 +1,7 @@
 from unittest import TestCase
 from unittest.mock import patch
-from data.api.conversion_utilities import convert_orders_to_btc
+
+from api.conversion_utilities import convert_orders_to_btc
 
 
 class TestConversionUtilities(TestCase):

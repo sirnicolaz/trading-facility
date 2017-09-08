@@ -2,6 +2,7 @@ from data.order_utilities import *
 
 __PRECISION = 12
 
+
 def get_sell_profit(orders):
     buys = only_buys(orders)
     sells = only_sells(orders)

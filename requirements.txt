@@ -1,2 +1,4 @@
 npyscreen==4.10.5
+numpy==1.13.1
 requests==2.7.0
+TA-Lib==0.4.10

@@ -1,6 +1,5 @@
 from unittest import TestCase
-
-from data.api.account_api import *
+from api.account_api import get_order_history
 
 
 class TestAccountAPI(TestCase):

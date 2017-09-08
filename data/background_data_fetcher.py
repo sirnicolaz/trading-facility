@@ -1,11 +1,12 @@
-from time import sleep
-from data.gain_calculator import get_gain
-from data.api.account_api import get_order_history
 from itertools import groupby
-from data.api.conversion_utilities import convert_orders_to_btc
-from data.data_pre_processing import with_actual_quantities
-from data.sell_profit_calculator import get_sell_profit
+from time import sleep
+
+from api.conversion_utilities import convert_orders_to_btc
+from api.account_api import get_order_history
 from data.current_profit_calculator import get_current_profit
+from data.data_pre_processing import with_actual_quantities
+from data.gain_calculator import get_gain
+from data.sell_profit_calculator import get_sell_profit
 
 MAIN_CURRENCIES = ["BTC", "LTC", "ETH"]
 
