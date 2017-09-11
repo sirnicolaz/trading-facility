@@ -17,7 +17,7 @@ class TestGainCalculator(TestCase):
             'PricePerUnit': 0.003
         }]
 
-        result = get_gain(orders)
+        result = get_current_gain(orders)
 
         self.assertEqual(100, result)
 
@@ -51,7 +51,7 @@ class TestGainCalculator(TestCase):
         }
         orders = [order_buy_1, order_sell, order_buy_2]
 
-        result = get_gain(orders)
+        result = get_current_gain(orders)
 
         self.assertEqual(68.0, result)
 

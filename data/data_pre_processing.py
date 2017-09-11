@@ -1,7 +1,10 @@
 import copy
 from functools import reduce
 from itertools import groupby
-from data.order_utilities import *
+from data.order_utilities import only_buys, only_sells
+from api.conversion_utilities import convert_orders_to_btc
+from api.account_api import get_order_history
+
 
 def __subtract_sells_from_buys(sells, buys):
     new_buys = copy.deepcopy(buys)
@@ -15,6 +18,13 @@ def __subtract_sells_from_buys(sells, buys):
 
 
     return new_buys
+
+
+def __simplify_orders(orders):
+    btc_orders = convert_orders_to_btc(orders)
+    extended_btc_orders = with_actual_quantities(btc_orders)
+
+    return extended_btc_orders
 
 
 def with_actual_quantities(orders):
@@ -46,3 +56,9 @@ def squash_sells_into_buys(orders):
         processed_orders += __subtract_sells_from_buys(currency_sells, currency_buys)
 
     return processed_orders
+
+
+def simplified_user_orders():
+    orders = get_order_history()
+
+    return __simplify_orders(orders)

@@ -7,7 +7,7 @@ from api.hidden_api_manager import request_handling_loop
 
 
 class TestHiddenAPIManager(TestCase):
-    @patch("data.api.hidden_api_manager.__COOKIES_FILE", "resources/cookies.txt")
+    @patch("api.hidden_api_manager.__COOKIES_FILE", "resources/cookies.txt")
     def test_request_handling_loop(self):
         queue = Queue()
         parent, child = Pipe()
@@ -24,6 +24,8 @@ class TestHiddenAPIManager(TestCase):
             'response_pipe': child
         })
 
-        result = parent.recv()
-
-        self.assertIsNotNone(result)
+        if parent.poll(timeout=3):
+            result = parent.recv()
+            self.assertIsNotNone(result)
+        else:
+            self.fail()

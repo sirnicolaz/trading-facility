@@ -5,7 +5,7 @@ from api.conversion_utilities import convert_orders_to_btc
 
 
 class TestConversionUtilities(TestCase):
-    @patch("data.api.conversion_utilities.eth_to_btc")
+    @patch("api.conversion_utilities.eth_to_btc")
     def test_get_gain_for_eth_exchange_base_case(self, mock_eth_to_btc):
         mock_eth_to_btc.return_value = 0.05
         orders = [{
@@ -28,7 +28,7 @@ class TestConversionUtilities(TestCase):
 
         self.assertListEqual(expected_result, result)
 
-    @patch("data.api.conversion_utilities.eth_to_btc")
+    @patch("api.conversion_utilities.eth_to_btc")
     def test_get_gain_for_eth_exchange_base_case(self, mock_eth_to_btc):
         mock_eth_to_btc.return_value = 0.05
         orders = [{
