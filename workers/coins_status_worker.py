@@ -48,7 +48,7 @@ def get_aggregated_data():
     return aggregated_data
 
 
-def fetch_gains_loop(connection):
+def fetch_coins_status_loop(connection):
     while True:
         try:
             aggregated_data = get_aggregated_data()

@@ -24,7 +24,7 @@ def calculate_gains(currency, order_value):
     return [order_gain, order_profit, ask_gain, ask_profit, bid_gain, bid_profit, last_gain, last_profit]
 
 
-def manage_order(connection):
+def fetch_gains_loop(connection):
     while True:
         try:
             if connection.poll(timeout=3):

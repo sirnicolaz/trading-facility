@@ -4,7 +4,7 @@ from monitoring.stochrsi_strategy import stoch_rsi, is_overbought, is_overssold
 import random
 
 
-class TestStoch_rsi(TestCase):
+class TestStochRsi(TestCase):
     @patch("monitoring.stochrsi_strategy.historical_api.get_historical_hour")
     def test_stoch_rsi(self, mock_get_historical_hour):
         mock_get_historical_hour.return_value = [{'close': random.uniform(0.5, 1.9)} for _ in range(101)]

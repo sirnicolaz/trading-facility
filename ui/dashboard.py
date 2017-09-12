@@ -7,14 +7,14 @@ from ui.manage_coin import ManageCoin
 class Dashboard(npyscreen.NPSAppManaged):
     keypress_timeout_default = 10
 
-    def __init__(self, data_producer, manager_pipe, *args, **kwargs):
+    def __init__(self, data_producer, gains_worker_pipe, *args, **kwargs):
         super(Dashboard, self).__init__(*args, **kwargs)
         self.data_producer = data_producer
-        self.manager_pipe = manager_pipe
+        self.gains_worker_pipe = gains_worker_pipe
 
     def onStart(self):
-        self.addForm('MAIN', CoinsStatus , data_producer=self.data_producer)#, name='Coin status dashboard', editable=False)
-        self.addForm('MANAGECOINFM', ManageCoin, data_pipe=self.manager_pipe)
+        self.addForm('MAIN', CoinsStatus , data_producer=self.data_producer, name='Coin dashboard') # editable=False)
+        self.addForm('MANAGECOINFM', ManageCoin, gains_worker_pipe=self.gains_worker_pipe)
         #self.addForm('STRATEGYFM', StrategyIndicatorsForm, lines=2, minimum_lines=1, columns=0, name='Strategies', editable=False)
 
 

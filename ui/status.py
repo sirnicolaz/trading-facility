@@ -49,7 +49,6 @@ class CoinsStatus(npyscreen.FormMutt):
     def beforeEditing(self):
         self.wMain.values = [["Loading...", "Loading...", "Loading...", "Loading...", "Loading..."]]
         self.wMain.display()
-        self.wStatus1.value = "Coin status dashboard"
         self.wStatus2.value = "Loading..."
 
     def refresh_data(self):

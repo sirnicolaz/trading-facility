@@ -1,7 +1,7 @@
 from multiprocessing import Process, Pipe
 from ui.dashboard import Dashboard
-from workers.order_manager import manage_order
-from workers.background_data_fetcher import fetch_gains_loop
+from workers.gains_worker import fetch_gains_loop
+from workers.coins_status_worker import fetch_coins_status_loop
 
 if __name__ == '__main__':
     #network_queue = Queue()
@@ -11,11 +11,11 @@ if __name__ == '__main__':
     #keep_alive_loop_process.start()
     #request_handling_loop_process.start()
     parent_conn, child_conn = Pipe()
-    p = Process(target=fetch_gains_loop, args=(child_conn,))
+    p = Process(target=fetch_coins_status_loop, args=(child_conn,))
     p.start()
 
     manager_parent_conn, manager_child_conn = Pipe()
-    mp = Process(target=manage_order, args=(manager_child_conn,))
+    mp = Process(target=fetch_gains_loop, args=(manager_child_conn,))
     mp.start()
 
-    dashboard = Dashboard(data_producer=parent_conn, manager_pipe=manager_parent_conn).run()
+    dashboard = Dashboard(data_producer=parent_conn, gains_worker_pipe=manager_parent_conn).run()

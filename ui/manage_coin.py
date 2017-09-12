@@ -18,9 +18,9 @@ class ManageCoin(npyscreen.ActionPopup):
     DEFAULT_COLUMNS = 100
     DEFAULT_LINES = 16
 
-    def __init__(self, data_pipe, *args, **kwargs):
+    def __init__(self, gains_worker_pipe, *args, **kwargs):
         super(ManageCoin, self).__init__(*args, **kwargs)
-        self.data_pipe = data_pipe
+        self.gains_worker_pipe = gains_worker_pipe
 
     def create(self):
         self.currency = None
@@ -34,7 +34,6 @@ class ManageCoin(npyscreen.ActionPopup):
         self.nextrely = 8
         self.overview = self.add(ManageCoinGrid, name="Gains", editable=False)
         self.overview.values = [["0", "0", "0", "0", "0", "0", "0", "0"]]
-        #self.put_sell_order = self.add(npyscreen.ButtonPress, name = "Put sell order")
 
     def set_current_value(self, current_value):
         self.current_value = current_value
@@ -49,17 +48,16 @@ class ManageCoin(npyscreen.ActionPopup):
         else:
             return "%s @%s" % (currency, value)
 
-
     def while_waiting(self):
         query = {"currency": self.currency}
         if self.last_order != self.order.value:
             query.update({"order": self.order.value})
             self.last_order = self.order.value
 
-        self.data_pipe.send(query)
+        self.gains_worker_pipe.send(query)
 
-        if self.data_pipe.poll():
-            data = self.data_pipe.recv()
+        if self.gains_worker_pipe.poll():
+            data = self.gains_worker_pipe.recv()
             if not "exception" in data:
                 self.overview.values = [data["gains"]]
                 self.overview.update()
