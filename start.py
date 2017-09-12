@@ -1,8 +1,7 @@
 from multiprocessing import Process, Pipe
-
-from data.background_data_fetcher import fetch_gains_loop
-from data.order_manager import manage_order
 from ui.dashboard import Dashboard
+from workers.order_manager import manage_order
+from workers.background_data_fetcher import fetch_gains_loop
 
 if __name__ == '__main__':
     #network_queue = Queue()

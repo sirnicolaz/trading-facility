@@ -70,7 +70,7 @@ class CoinsStatus(npyscreen.FormMutt):
 
     def manage_coin(self, *args, **keywords):
         self.parentApp.getForm('MANAGECOINFM').currency = self.coin_values[self.wMain.edit_cell[0]][0]
-        self.parentApp.getForm('MANAGECOINFM').current_value = self.coin_values[self.wMain.edit_cell[0]][1]
+        self.parentApp.getForm('MANAGECOINFM').set_current_value(self.coin_values[self.wMain.edit_cell[0]][1])
         self.parentApp.switchForm('MANAGECOINFM')
 
     #def afterEditing(self):

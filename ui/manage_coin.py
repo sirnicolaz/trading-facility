@@ -16,6 +16,7 @@ class ManageCoinGrid(npyscreen.GridColTitles):
 class ManageCoin(npyscreen.ActionPopup):
     keypress_timeout_default = 3
     DEFAULT_COLUMNS = 100
+    DEFAULT_LINES = 16
 
     def __init__(self, data_pipe, *args, **kwargs):
         super(ManageCoin, self).__init__(*args, **kwargs)
@@ -25,11 +26,19 @@ class ManageCoin(npyscreen.ActionPopup):
         self.currency = None
         self.last_order = None
         self.current_value = None
-        self.order = self.add(npyscreen.TitleText, name = "Order:", max_width=30, max_height=1)
+        self.order = self.add(npyscreen.TitleText, name = "Order:", max_width=40, max_height=1)
         self.nextrely = 4
+        self.order_type = self.add(npyscreen.TitleSelectOne, name = "Type:", scroll_exit=True,
+                                   slow_scroll=True, max_width=40, max_height=2,
+                                   values=["Stop loss", "Limit"])
+        self.nextrely = 8
         self.overview = self.add(ManageCoinGrid, name="Gains", editable=False)
         self.overview.values = [["0", "0", "0", "0", "0", "0", "0", "0"]]
         #self.put_sell_order = self.add(npyscreen.ButtonPress, name = "Put sell order")
+
+    def set_current_value(self, current_value):
+        self.current_value = current_value
+        self.order.value = str(current_value)
 
     def beforeEditing(self):
         self.name = self.form_name(self.currency, self.current_value)
@@ -42,9 +51,12 @@ class ManageCoin(npyscreen.ActionPopup):
 
 
     def while_waiting(self):
+        query = {"currency": self.currency}
         if self.last_order != self.order.value:
-            self.data_pipe.send({"currency": self.currency, "order": self.order.value})
+            query.update({"order": self.order.value})
             self.last_order = self.order.value
+
+        self.data_pipe.send(query)
 
         if self.data_pipe.poll():
             data = self.data_pipe.recv()

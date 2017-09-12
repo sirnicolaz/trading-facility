@@ -30,9 +30,12 @@ def manage_order(connection):
             if connection.poll(timeout=3):
                 query = connection.recv()
                 currency = query["currency"]
-                order = float(query["order"])
-                gains = calculate_gains(currency, order)
+                try:
+                    order = float(query["order"])
+                except ValueError:
+                    order = 0
 
+                gains = calculate_gains(currency, order)
                 connection.send({"gains": gains})
         except Exception as e:
             connection.send({"exception": str(e)})

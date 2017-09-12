@@ -1,12 +1,12 @@
 from unittest import TestCase
 from unittest.mock import patch
 
-from data.order_manager import calculate_gains
+from workers.order_manager import calculate_gains
 
 
 class TestOrderManager(TestCase):
-    @patch("data.order_manager.get_ticker")
-    @patch("data.order_manager.simplified_user_orders")
+    @patch("workers.order_manager.get_ticker")
+    @patch("workers.order_manager.simplified_user_orders")
     def test_calculate_gains(self, mock_simplified_user_orders, mock_get_ticker):
         test_currency = "STORJ"
         mock_simplified_user_orders.return_value = self.__mocked_orders(test_currency)
