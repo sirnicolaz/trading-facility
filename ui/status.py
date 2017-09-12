@@ -6,23 +6,12 @@ import curses
 class CoinsStatusGrid(npyscreen.GridColTitles):
     def __init__(self, *args, **kwargs):
         kwargs.update({
-            "col_titles": ["market", "current btc", "gain", "sold profit (btc)", "sell all now profit (btc)"],
+            "col_titles": ["market", "current price", "gain", "sold profit", "sell all now profit"],
             "columns": 5,
             "select_whole_line": True,
             "row_height": 2
         })
         super(CoinsStatusGrid, self).__init__(*args, **kwargs)
-
-    def create(self):
-        self.col_titles = ["market", "gain", "sold profit (btc)", "sell all now profit (btc)"]
-        self.columns = 4
-        self.select_whole_line = True
-        self.row_height = 2
-        self.values = [["Loading...", "Loading...", "Loading...", "Loading..."]]
-
-    #def refresh(self, new_data):
-    #    data = list(sum(new_data, []))
-    #    #self.set_grid_values_from_flat_list(new_values=data, reset_cursor=False)
 
     def custom_print_cell(self, actual_cell, cell_display_value):
         try:
@@ -37,11 +26,12 @@ class CoinsStatusGrid(npyscreen.GridColTitles):
 
 class CoinsStatus(npyscreen.FormMutt):
     MAIN_WIDGET_CLASS = CoinsStatusGrid
-    MAIN_WIDGET_CLASS_START_LINE = 3
+    MAIN_WIDGET_CLASS_START_LINE = 2
 
-    def __init__(self, data_producer, *args, **kwargs):
+    def __init__(self, data_producer, reference_currency, *args, **kwargs):
         super(CoinsStatus, self).__init__(*args, **kwargs)
         self.data_producer = data_producer
+        self.reference_currency = reference_currency
         self.coin_values = []
         self.add_handlers({
             "c": self.manage_coin,
@@ -50,6 +40,7 @@ class CoinsStatus(npyscreen.FormMutt):
     def beforeEditing(self):
         self.wMain.values = [["Loading...", "Loading...", "Loading...", "Loading...", "Loading..."]]
         self.wMain.display()
+        self.wStatus1.value = "coin status board (%s)" % self.reference_currency
         self.wStatus2.value = "Loading..."
 
     def refresh_data(self):

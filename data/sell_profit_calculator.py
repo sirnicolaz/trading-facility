@@ -1,11 +1,11 @@
-from helpers.order_utilities import *
+from helpers.order_filters import *
 
 __PRECISION = 12
 
 
 def get_sell_profit(orders):
-    buys = only_buys(orders)
-    sells = only_sells(orders)
+    buys = filter_buys(orders)
+    sells = filter_sells(orders)
 
     total_profit_btc = 0
     for sell in reversed(sells):

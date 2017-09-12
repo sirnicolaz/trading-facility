@@ -1,7 +1,6 @@
 from itertools import groupby
 from time import sleep
-
-from api.conversion_utilities import convert_orders_to_btc
+from data.conversion_manager import convert_orders_to_btc, convert_orders_to_eth
 from api.account_api import get_order_history
 from data.profit_calculator import get_profit
 from data.data_pre_processing import with_actual_quantities
@@ -18,20 +17,28 @@ def __get_total(aggregated_data):
     return ['TOTAL', '', '', total_profit]
 
 
-def get_aggregated_data():
+def get_aggregated_data(reference_currency):
     orders = get_order_history().copy()
-    btc_orders = convert_orders_to_btc(orders)
-    extended_btc_orders = with_actual_quantities(btc_orders)
+    if reference_currency == "btc":
+        orders = convert_orders_to_btc(orders)
+    elif reference_currency == "eth":
+        orders = convert_orders_to_eth(orders)
+
+    extended_orders = with_actual_quantities(orders)
 
     aggregated_data = []
 
-    sorted_by_exchange = sorted(extended_btc_orders, key=lambda x: x["Exchange"])
+    sorted_by_exchange = sorted(extended_orders, key=lambda x: x["Exchange"])
     for market, group in groupby(sorted_by_exchange, lambda item: item["Exchange"]):
-        currency = extract_currency(market)
+        currency = extract_currency(market, reference_currency)
         if currency in MAIN_CURRENCIES:
             continue
 
-        current_value = get_ticker(market)['Last']
+        ticker = get_ticker(market)
+        if ticker is None:
+            continue
+
+        current_value = ticker['Last']
         currency_orders = list(group)
         gain = get_gain(currency_orders, current_value)
         sell_profit = get_sell_profit(currency_orders)
@@ -44,10 +51,10 @@ def get_aggregated_data():
     return aggregated_data
 
 
-def fetch_coins_status_loop(connection):
+def fetch_coins_status_loop(connection, reference_currency="btc"):
     while True:
         try:
-            aggregated_data = get_aggregated_data()
+            aggregated_data = get_aggregated_data(reference_currency)
             connection.send(aggregated_data)
         except Exception as e:
             connection.send({"exception": str(e)})

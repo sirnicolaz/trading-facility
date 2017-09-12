@@ -3,8 +3,8 @@ from functools import reduce
 from itertools import groupby
 
 from api.account_api import get_order_history
-from api.conversion_utilities import convert_orders_to_btc
-from helpers.order_utilities import only_buys, only_sells
+from data.conversion_manager import convert_orders_to_btc, convert_orders_to_eth
+from helpers.order_filters import filter_buys, filter_sells
 
 
 def __subtract_sells_from_buys(sells, buys):
@@ -21,11 +21,15 @@ def __subtract_sells_from_buys(sells, buys):
     return new_buys
 
 
-def __simplify_orders(orders):
-    btc_orders = convert_orders_to_btc(orders)
-    extended_btc_orders = with_actual_quantities(btc_orders)
+def __simplify_orders(reference_currency, orders):
+    if reference_currency == "btc":
+        orders = convert_orders_to_btc(orders)
+    elif reference_currency == "eth":
+        orders = convert_orders_to_eth(orders)
 
-    return extended_btc_orders
+    extended_orders = with_actual_quantities(orders)
+
+    return extended_orders
 
 
 def with_actual_quantities(orders):
@@ -51,15 +55,15 @@ def squash_sells_into_buys(orders):
     sorted_by_exchange = sorted(orders, key=lambda x: x["Exchange"])
     for market, group in groupby(sorted_by_exchange, lambda item: item["Exchange"]):
         currency_orders = list(group)
-        currency_sells = only_sells(currency_orders)
-        currency_buys = only_buys(currency_orders)
+        currency_sells = filter_sells(currency_orders)
+        currency_buys = filter_buys(currency_orders)
 
         processed_orders += __subtract_sells_from_buys(currency_sells, currency_buys)
 
     return processed_orders
 
 
-def simplified_user_orders():
+def simplified_user_orders(reference_currency="btc"):
     orders = get_order_history()
 
-    return __simplify_orders(orders)
+    return __simplify_orders(reference_currency.lower(), orders)

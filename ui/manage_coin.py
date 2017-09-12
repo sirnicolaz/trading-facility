@@ -5,7 +5,7 @@ class ManageCoinGrid(npyscreen.GridColTitles):
 
     def __init__(self, *args, **kwargs):
         kwargs.update({
-            "col_titles": ["order %", "order btc", "bid %", "bid btc", "ask %", "ask btc", "last %", "last btc"],
+            "col_titles": ["order %", "order abs", "bid %", "bid abs", "ask %", "ask abs", "last %", "last abs"],
             "columns": 8,
             "select_whole_line": True,
             "row_height": 2
@@ -24,7 +24,6 @@ class ManageCoin(npyscreen.ActionPopup):
 
     def create(self):
         self.currency = None
-        self.last_order = None
         self.current_value = None
         self.order = self.add(npyscreen.TitleText, name = "Order:", max_width=40, max_height=1)
         self.nextrely = 4
@@ -49,11 +48,7 @@ class ManageCoin(npyscreen.ActionPopup):
             return "%s @%s" % (currency, value)
 
     def while_waiting(self):
-        query = {"currency": self.currency}
-        if self.last_order != self.order.value:
-            query.update({"order": self.order.value})
-            self.last_order = self.order.value
-
+        query = {"currency": self.currency, "order": self.order.value}
         self.gains_worker_pipe.send(query)
 
         if self.gains_worker_pipe.poll():
@@ -61,6 +56,8 @@ class ManageCoin(npyscreen.ActionPopup):
             if not "exception" in data:
                 self.overview.values = [data["gains"]]
                 self.overview.update()
+            else:
+                npyscreen.notify_confirm(data["exception"])
 
     def on_ok(self):
         self.parentApp.switchFormPrevious()
