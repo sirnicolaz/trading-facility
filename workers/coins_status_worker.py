@@ -8,13 +8,9 @@ from data.data_pre_processing import with_actual_quantities
 from data.gain_calculator import get_gain
 from data.sell_profit_calculator import get_sell_profit
 from api.public_api import get_ticker
-
+from helpers.market_helpers import extract_currency
 
 MAIN_CURRENCIES = ["BTC", "LTC", "ETH"]
-
-
-def __get_currency(market):
-    return market.replace("BTC-", "")
 
 
 def __get_total(aggregated_data):
@@ -31,7 +27,7 @@ def get_aggregated_data():
 
     sorted_by_exchange = sorted(extended_btc_orders, key=lambda x: x["Exchange"])
     for market, group in groupby(sorted_by_exchange, lambda item: item["Exchange"]):
-        currency = __get_currency(market)
+        currency = extract_currency(market)
         if currency in MAIN_CURRENCIES:
             continue
 

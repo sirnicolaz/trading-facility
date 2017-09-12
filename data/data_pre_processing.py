@@ -1,9 +1,10 @@
 import copy
 from functools import reduce
 from itertools import groupby
-from data.order_utilities import only_buys, only_sells
-from api.conversion_utilities import convert_orders_to_btc
+
 from api.account_api import get_order_history
+from api.conversion_utilities import convert_orders_to_btc
+from helpers.order_utilities import only_buys, only_sells
 
 
 def __subtract_sells_from_buys(sells, buys):

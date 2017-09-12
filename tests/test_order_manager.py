@@ -1,30 +1,45 @@
 from unittest import TestCase
 from unittest.mock import patch
-from workers.gains_worker import calculate_gains
+
+from data.order_manager import cancel_all_opened_orders, sell_all_limit
 
 
-@patch("workers.gains_worker.get_ticker")
-@patch("workers.gains_worker.simplified_user_orders")
-def test_calculate_gains(self, mock_simplified_user_orders, mock_get_ticker):
-    test_currency = "STORJ"
-    mock_simplified_user_orders.return_value = self.__mocked_orders(test_currency)
-    mock_get_ticker.return_value = {"Last": 0.8, "Ask": 0.85, "Bid": 0.76}
-
-    result = calculate_gains(test_currency, 0.9)
-
-    self.assertListEqual([265.625, 5.0, 245.3125, 4.6, 208.75, 3.88, 225.0, 4.2], result)
 class TestOrderManager(TestCase):
+    @patch("data.order_manager.get_balance")
+    @patch("data.order_manager.put_sell_limit")
+    def test_sell_all_limit(self, mock_put_sell_limit, mock_get_balance):
+        mock_get_balance.return_value = {'Available': 42}
+        mock_put_sell_limit.return_value = 'test'
 
-    def __mocked_orders(self, currency):
-        market = "BTC-" + currency
-        return [{
-            'Exchange': market,
-            'OrderType': 'LIMIT_BUY',
-            'ActualQuantity': 3,
-            'PricePerUnit': 0.4
-        },{
-            'Exchange': market,
-            'OrderType': 'LIMIT_BUY',
-            'ActualQuantity': 5,
-            'PricePerUnit': 0.2
-        }]
+        result = sell_all_limit("BTC-DIO", 0.1)
+
+        mock_get_balance.assert_called_with("DIO")
+        mock_put_sell_limit.assert_called_with("BTC-DIO", 42, 0.1)
+        self.assertEqual(result, 'test')
+
+    @patch("data.order_manager.get_opened_orders")
+    @patch("data.order_manager.cancel_order")
+    def test_cancel_all_opened_orders_fetches_right_orders(self, mock_cancel_order, mock_get_opened_orders):
+        cancel_all_opened_orders("BTC-DIO")
+
+        mock_get_opened_orders.assert_called_with("BTC-DIO")
+
+    @patch("data.order_manager.get_opened_orders")
+    @patch("data.order_manager.cancel_order")
+    def test_cancel_all_opened_orders(self, mock_cancel_order, mock_get_opened_orders):
+        mock_get_opened_orders.return_value = [{"OrderUuid": 42}, {"OrderUuid": 43}]
+
+        cancel_all_opened_orders("BTC-DIO")
+
+        mock_cancel_order.assert_any_call(42)
+        mock_cancel_order.assert_any_call(43)
+
+    @patch("data.order_manager.get_opened_orders")
+    @patch("data.order_manager.cancel_order")
+    def test_cancel_all_opened_orders_with_no_opened_orders(self, mock_cancel_order, mock_get_opened_orders):
+        mock_get_opened_orders.return_value = []
+
+        cancel_all_opened_orders("BTC-DIO")
+
+        self.assertEqual(mock_cancel_order.call_count, 0)
+
