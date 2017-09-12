@@ -37,6 +37,7 @@ class CoinsStatusGrid(npyscreen.GridColTitles):
 
 class CoinsStatus(npyscreen.FormMutt):
     MAIN_WIDGET_CLASS = CoinsStatusGrid
+    MAIN_WIDGET_CLASS_START_LINE = 3
 
     def __init__(self, data_producer, *args, **kwargs):
         super(CoinsStatus, self).__init__(*args, **kwargs)

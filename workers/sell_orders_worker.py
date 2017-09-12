@@ -1,8 +1,8 @@
-from data.order_manager import sell_all_limit, cancel_all_opened_orders
+from data.order_manager import sell_all_limit, cancel_all_opened_sell_orders
 
 
 def put_sell_all_limit_order(market, rate):
-    cancel_all_opened_orders(market)
+    cancel_all_opened_sell_orders(market)
     return sell_all_limit(market, rate)
 
 
