@@ -6,7 +6,7 @@ import datetime
 class CoinsStatusGrid(npyscreen.GridColTitles):
     def __init__(self, *args, **kwargs):
         kwargs.update({
-            "col_titles": ["market", "last price", "gain %", "sold profit", "sell all now profit"],
+            "col_titles": ["market", "last price", "gain", "sold profit", "sell all now profit"],
             "columns": 5,
             "select_whole_line": True,
             "row_height": 2
@@ -16,12 +16,21 @@ class CoinsStatusGrid(npyscreen.GridColTitles):
     def custom_print_cell(self, actual_cell, cell_display_value):
         try:
             value = float(cell_display_value)
+
             if value < 0.0:
                 actual_cell.color = 'DANGER'
             else:
                 actual_cell.color = 'GOOD'
+
+            if actual_cell.grid_current_value_index != -1:
+                _, column = actual_cell.grid_current_value_index
+                if (column == 2):
+                    actual_cell.value = "%.2f%%" % value
+                else:
+                    actual_cell.value = "%.10f" % value
+
         except ValueError:
-            actual_cell.color = 'DEFAULT'
+            actual_cell.color = 'CONTROL'
 
 
 class CoinsStatus(npyscreen.FormMutt):
