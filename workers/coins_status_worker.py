@@ -1,15 +1,12 @@
-from environment import REFERENCE_CURRENCY
 from itertools import groupby
 from time import sleep
-from data.conversion_manager import convert_orders_to_btc, convert_orders_to_eth
-from api.account_api import get_order_history
+from data.data_pre_processing import simplified_user_orders
 from data.profit_calculator import get_profit
-from data.data_pre_processing import with_actual_quantities
 from data.gain_calculator import get_gain
 from data.sell_profit_calculator import get_sell_profit
 from api.public_api import get_ticker
 from helpers.market_helpers import extract_currency
-from data.conversion_manager import convert_orders_to_reference_currency
+
 
 MAIN_CURRENCIES = ["BTC", "LTC", "ETH"]
 
@@ -20,14 +17,10 @@ def __get_total(aggregated_data):
 
 
 def get_aggregated_data():
-    orders = get_order_history().copy()
-    orders = convert_orders_to_reference_currency(orders)
-
-    extended_orders = with_actual_quantities(orders)
-
+    orders = simplified_user_orders()
     aggregated_data = []
 
-    sorted_by_exchange = sorted(extended_orders, key=lambda x: x["Exchange"])
+    sorted_by_exchange = sorted(orders, key=lambda x: x["Exchange"])
     for market, group in groupby(sorted_by_exchange, lambda item: item["Exchange"]):
         currency = extract_currency(market)
         if currency in MAIN_CURRENCIES:

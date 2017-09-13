@@ -2,7 +2,7 @@ import copy
 from environment import REFERENCE_CURRENCY
 from functools import reduce
 from itertools import groupby
-from api.account_api import get_order_history
+from data.order_manager import load_or_fetch_order_history
 from data.conversion_manager import convert_orders_to_btc, convert_orders_to_eth
 from helpers.order_filters import filter_buys, filter_sells
 
@@ -64,6 +64,6 @@ def squash_sells_into_buys(orders):
 
 
 def simplified_user_orders():
-    orders = get_order_history()
+    orders = load_or_fetch_order_history()
 
     return __simplify_orders(orders)

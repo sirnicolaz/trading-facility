@@ -1,4 +1,4 @@
-from environment import API_KEY, API_SECRET
+from environment import API_KEY, API_SECRET, ORDER_HISTORY_FILE
 from functools import lru_cache
 from api.endpoints.bittrex_endpoints import AccountEndpoints
 from api.request_handler import get_auth
