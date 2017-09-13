@@ -3,11 +3,12 @@ from data.data_pre_processing import simplified_user_orders
 from data.gain_calculator import get_gain
 from data.profit_calculator import get_profit
 from helpers.order_filters import filter_currency
+from helpers.market_helpers import market_for_currency
 
 
-def calculate_gains(reference_currency, currency, order_value):
-    ticker = get_ticker(reference_currency.upper() + "-" + currency)
-    orders = simplified_user_orders(reference_currency=reference_currency)
+def calculate_gains(currency, order_value):
+    ticker = get_ticker(market_for_currency(currency))
+    orders = simplified_user_orders()
 
     currency_orders = filter_currency(orders, currency)
 
@@ -24,7 +25,7 @@ def calculate_gains(reference_currency, currency, order_value):
     return [order_gain, order_profit, ask_gain, ask_profit, bid_gain, bid_profit, last_gain, last_profit]
 
 
-def fetch_gains_loop(connection, reference_currency):
+def fetch_gains_loop(connection):
     while True:
         try:
             query = connection.recv()
@@ -34,7 +35,7 @@ def fetch_gains_loop(connection, reference_currency):
             except ValueError:
                 order = 0
 
-            gains = calculate_gains(reference_currency, currency, order)
+            gains = calculate_gains(currency, order)
             connection.send({"gains": gains})
         except Exception as e:
             connection.send({"exception": str(e)})

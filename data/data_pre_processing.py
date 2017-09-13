@@ -1,7 +1,7 @@
 import copy
+from environment import REFERENCE_CURRENCY
 from functools import reduce
 from itertools import groupby
-
 from api.account_api import get_order_history
 from data.conversion_manager import convert_orders_to_btc, convert_orders_to_eth
 from helpers.order_filters import filter_buys, filter_sells
@@ -21,10 +21,10 @@ def __subtract_sells_from_buys(sells, buys):
     return new_buys
 
 
-def __simplify_orders(reference_currency, orders):
-    if reference_currency == "btc":
+def __simplify_orders(orders):
+    if REFERENCE_CURRENCY == "btc":
         orders = convert_orders_to_btc(orders)
-    elif reference_currency == "eth":
+    elif REFERENCE_CURRENCY == "eth":
         orders = convert_orders_to_eth(orders)
 
     extended_orders = with_actual_quantities(orders)
@@ -63,7 +63,7 @@ def squash_sells_into_buys(orders):
     return processed_orders
 
 
-def simplified_user_orders(reference_currency="btc"):
+def simplified_user_orders():
     orders = get_order_history()
 
-    return __simplify_orders(reference_currency.lower(), orders)
+    return __simplify_orders(orders)

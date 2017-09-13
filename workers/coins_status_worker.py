@@ -1,3 +1,4 @@
+from environment import REFERENCE_CURRENCY
 from itertools import groupby
 from time import sleep
 from data.conversion_manager import convert_orders_to_btc, convert_orders_to_eth
@@ -8,6 +9,7 @@ from data.gain_calculator import get_gain
 from data.sell_profit_calculator import get_sell_profit
 from api.public_api import get_ticker
 from helpers.market_helpers import extract_currency
+from data.conversion_manager import convert_orders_to_reference_currency
 
 MAIN_CURRENCIES = ["BTC", "LTC", "ETH"]
 
@@ -17,12 +19,9 @@ def __get_total(aggregated_data):
     return ['TOTAL', '', '', total_profit]
 
 
-def get_aggregated_data(reference_currency):
+def get_aggregated_data():
     orders = get_order_history().copy()
-    if reference_currency == "btc":
-        orders = convert_orders_to_btc(orders)
-    elif reference_currency == "eth":
-        orders = convert_orders_to_eth(orders)
+    orders = convert_orders_to_reference_currency(orders)
 
     extended_orders = with_actual_quantities(orders)
 
@@ -30,7 +29,7 @@ def get_aggregated_data(reference_currency):
 
     sorted_by_exchange = sorted(extended_orders, key=lambda x: x["Exchange"])
     for market, group in groupby(sorted_by_exchange, lambda item: item["Exchange"]):
-        currency = extract_currency(market, reference_currency)
+        currency = extract_currency(market)
         if currency in MAIN_CURRENCIES:
             continue
 
@@ -51,10 +50,10 @@ def get_aggregated_data(reference_currency):
     return aggregated_data
 
 
-def fetch_coins_status_loop(connection, reference_currency="btc"):
+def fetch_coins_status_loop(connection):
     while True:
         try:
-            aggregated_data = get_aggregated_data(reference_currency)
+            aggregated_data = get_aggregated_data()
             connection.send(aggregated_data)
         except Exception as e:
             connection.send({"exception": str(e)})

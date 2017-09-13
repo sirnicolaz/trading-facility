@@ -1,5 +1,6 @@
-import copy
+from environment import REFERENCE_CURRENCY
 from api.price_api import get_price
+import copy
 
 __PRECISION = 20
 
@@ -22,3 +23,10 @@ def conver_orders_wrapper(from_currency, to_currency):
 
 convert_orders_to_eth = conver_orders_wrapper("BTC", "ETH")
 convert_orders_to_btc = conver_orders_wrapper("ETH", "BTC")
+
+
+def convert_orders_to_reference_currency(orders):
+    if REFERENCE_CURRENCY == "btc":
+        return convert_orders_to_btc(orders)
+    elif REFERENCE_CURRENCY == "eth":
+        return convert_orders_to_eth(orders)

@@ -1,12 +1,12 @@
+from environment import REFERENCE_CURRENCY
 import npyscreen
 import datetime
-import curses
 
 
 class CoinsStatusGrid(npyscreen.GridColTitles):
     def __init__(self, *args, **kwargs):
         kwargs.update({
-            "col_titles": ["market", "current price", "gain", "sold profit", "sell all now profit"],
+            "col_titles": ["market", "last price", "gain %", "sold profit", "sell all now profit"],
             "columns": 5,
             "select_whole_line": True,
             "row_height": 2
@@ -28,10 +28,9 @@ class CoinsStatus(npyscreen.FormMutt):
     MAIN_WIDGET_CLASS = CoinsStatusGrid
     MAIN_WIDGET_CLASS_START_LINE = 2
 
-    def __init__(self, data_producer, reference_currency, *args, **kwargs):
+    def __init__(self, data_producer, *args, **kwargs):
         super(CoinsStatus, self).__init__(*args, **kwargs)
         self.data_producer = data_producer
-        self.reference_currency = reference_currency
         self.coin_values = []
         self.add_handlers({
             "c": self.manage_coin,
@@ -40,7 +39,7 @@ class CoinsStatus(npyscreen.FormMutt):
     def beforeEditing(self):
         self.wMain.values = [["Loading...", "Loading...", "Loading...", "Loading...", "Loading..."]]
         self.wMain.display()
-        self.wStatus1.value = "coin status board (%s)" % self.reference_currency
+        self.wStatus1.value = "coin status board (%s)" % REFERENCE_CURRENCY
         self.wStatus2.value = "Loading..."
 
     def refresh_data(self):

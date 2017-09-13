@@ -1,15 +1,11 @@
-import os
+from environment import API_KEY, API_SECRET
 from functools import lru_cache
-
 from api.endpoints.bittrex_endpoints import AccountEndpoints
 from api.request_handler import get_auth
 
-api_key = os.environ.get('API_KEY')
-api_secret = os.environ.get('API_SECRET')
-
 
 def __fetch(url):
-    return get_auth(url, api_key, api_secret)['result']
+    return get_auth(url, API_KEY, API_SECRET)['result']
 
 
 @lru_cache(maxsize=None)
