@@ -1,4 +1,5 @@
 from environment import REFERENCE_CURRENCY
+from ui.controllers.converter_action_controller import ConvertedActionController
 import npyscreen
 import datetime
 
@@ -33,9 +34,11 @@ class CoinsStatusGrid(npyscreen.GridColTitles):
             actual_cell.color = 'CONTROL'
 
 
-class CoinsStatus(npyscreen.FormMutt):
+class CoinsStatus(npyscreen.FormMuttActive):
     MAIN_WIDGET_CLASS = CoinsStatusGrid
     MAIN_WIDGET_CLASS_START_LINE = 2
+    ACTION_CONTROLLER = ConvertedActionController
+    COMMAND_WIDGET_CLASS = npyscreen.TextCommandBox
 
     def __init__(self, data_producer, *args, **kwargs):
         super(CoinsStatus, self).__init__(*args, **kwargs)
@@ -48,8 +51,16 @@ class CoinsStatus(npyscreen.FormMutt):
     def beforeEditing(self):
         self.wMain.values = [["Loading...", "Loading...", "Loading...", "Loading...", "Loading..."]]
         self.wMain.display()
-        self.wStatus1.value = "coin status board (%s)" % REFERENCE_CURRENCY
-        self.wStatus2.value = "Loading..."
+        self.wStatus2.value = "converter"
+        self.update_title()
+
+    def update_title(self, atime=None):
+        title = "coin status board (%s)" % REFERENCE_CURRENCY
+        if atime:
+            title = "%s - last updated %s" % (title, atime.strftime("%Y-%m-%d %H:%M:%S"))
+
+        self.wStatus1.value = title
+        self.wStatus1.display()
 
     def refresh_data(self):
         if self.data_producer.poll():
@@ -59,10 +70,9 @@ class CoinsStatus(npyscreen.FormMutt):
             else:
                 self.coin_values = list(map(lambda x: [x[0], x[1]], data))
                 self.wMain.values = data
-                self.wStatus2.value = "Last update %s" % str(datetime.datetime.now())
+                self.update_title(datetime.datetime.now())
 
         self.wMain.update()
-        self.wStatus2.update()
 
     def while_waiting(self):
         self.refresh_data()

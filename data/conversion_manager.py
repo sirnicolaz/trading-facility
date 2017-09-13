@@ -30,3 +30,10 @@ def convert_orders_to_reference_currency(orders):
         return convert_orders_to_btc(orders)
     elif REFERENCE_CURRENCY == "eth":
         return convert_orders_to_eth(orders)
+
+
+def convert(value, from_currency, to_currency):
+    one_unit_value = get_price(from_currency, to_currency)
+    result = float(value * float(one_unit_value))
+
+    return result
