@@ -1,9 +1,8 @@
 from itertools import groupby
 from time import sleep
-from data.data_pre_processing import simplified_user_orders
-from data.profit_calculator import get_profit
-from data.gain_calculator import get_gain
-from data.sell_profit_calculator import get_sell_profit
+from data.data_pre_processing import consolidated_user_orders
+from data.profit_calculator import get_current_profit, get_achieved_profit
+from data.gain_calculator import get_current_gain
 from api.public_api import get_ticker
 from helpers.market_helpers import extract_currency
 
@@ -17,7 +16,7 @@ def __get_total(aggregated_data):
 
 
 def get_aggregated_data():
-    orders = simplified_user_orders()
+    orders = consolidated_user_orders()
     aggregated_data = []
 
     sorted_by_exchange = sorted(orders, key=lambda x: x["Exchange"])
@@ -30,11 +29,11 @@ def get_aggregated_data():
         if ticker is None:
             continue
 
-        current_value = ticker['Last']
         currency_orders = list(group)
-        gain = get_gain(currency_orders, current_value)
-        sell_profit = get_sell_profit(currency_orders)
-        potential_current_profit = get_profit(currency_orders, currency, current_value)
+        gain = get_current_gain(currency_orders)
+        sell_profit = get_achieved_profit(currency_orders)
+        potential_current_profit = get_current_profit(currency_orders, currency)
+        current_value = ticker['Last']
 
         aggregated_data += [[currency, current_value, gain, sell_profit, potential_current_profit]]
 

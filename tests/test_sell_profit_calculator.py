@@ -1,5 +1,5 @@
 from unittest import TestCase
-from data.sell_profit_calculator import get_sell_profit
+from data.profit_calculator import get_achieved_profit
 
 
 class TestSellProfitCalculator(TestCase):
@@ -14,7 +14,7 @@ class TestSellProfitCalculator(TestCase):
             'PricePerUnit': 0.006
         }]
 
-        result = get_sell_profit(orders)
+        result = get_achieved_profit(orders)
 
         expected_result = 0.003 * 5
         self.assertEqual(expected_result, result)
@@ -34,7 +34,7 @@ class TestSellProfitCalculator(TestCase):
             'PricePerUnit': 0.006
         }]
 
-        result = get_sell_profit(orders)
+        result = get_achieved_profit(orders)
 
         expected_result = 0.003 * 5
         self.assertEqual(expected_result, result)
@@ -54,7 +54,7 @@ class TestSellProfitCalculator(TestCase):
             'PricePerUnit': 0.006
         }]
 
-        result = get_sell_profit(orders)
+        result = get_achieved_profit(orders)
 
         expected_result = 0.009
         self.assertEqual(expected_result, result)
@@ -74,7 +74,7 @@ class TestSellProfitCalculator(TestCase):
             'PricePerUnit': 0.006
         }]
 
-        result = get_sell_profit(orders)
+        result = get_achieved_profit(orders)
 
         expected_result = 0.003 * 5
         self.assertEqual(expected_result, result)
@@ -94,7 +94,7 @@ class TestSellProfitCalculator(TestCase):
             'PricePerUnit': 0.006
         }]
 
-        result = get_sell_profit(orders)
+        result = get_achieved_profit(orders)
 
         expected_result = 0.009
         self.assertEqual(expected_result, result)

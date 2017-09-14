@@ -1,6 +1,7 @@
 from data import data_pre_processing
 from data.fin_math import percentage_gain
 from api.public_api import get_ticker
+from helpers.order_filters import filter_currency
 
 
 def __get_gain_for_order(order, current_value):
@@ -37,3 +38,10 @@ def get_gain(orders, new_value):
     buy_orders = data_pre_processing.squash_sells_into_buys(orders)
 
     return __get_gain_for_value(buy_orders, new_value)
+
+
+def get_current_gain_for_currency(currency):
+    orders = data_pre_processing.consolidated_user_orders()
+    currency_orders = filter_currency(currency=currency, orders=orders)
+
+    return get_current_gain(currency_orders)

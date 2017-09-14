@@ -21,7 +21,7 @@ def __subtract_sells_from_buys(sells, buys):
     return new_buys
 
 
-def __simplify_orders(orders):
+def __consolidate_orders(orders):
     if REFERENCE_CURRENCY == "btc":
         orders = convert_orders_to_btc(orders)
     elif REFERENCE_CURRENCY == "eth":
@@ -63,7 +63,7 @@ def squash_sells_into_buys(orders):
     return processed_orders
 
 
-def simplified_user_orders():
+def consolidated_user_orders():
     orders = load_or_fetch_order_history()
 
-    return __simplify_orders(orders)
+    return __consolidate_orders(orders)
