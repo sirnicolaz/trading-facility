@@ -1,6 +1,6 @@
 from data.gain_calculator import get_current_gain_for_currency
 from data.order_manager import put_sell_all_limit_order
-from helpers.market_helpers import market_for_currency
+from utilities.market_helpers import market_for_currency
 from api.public_api import get_ticker
 import time
 

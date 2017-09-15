@@ -4,7 +4,7 @@ from data.data_pre_processing import consolidated_user_orders
 from data.profit_calculator import get_current_profit, get_achieved_profit
 from data.gain_calculator import get_current_gain
 from api.public_api import get_ticker
-from helpers.market_helpers import extract_currency
+from utilities.market_helpers import extract_currency
 
 
 MAIN_CURRENCIES = ["BTC", "LTC", "ETH"]

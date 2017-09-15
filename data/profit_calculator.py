@@ -1,8 +1,8 @@
 from api.account_api import get_balance
 from api.public_api import get_ticker
 from data import data_pre_processing
-from helpers.order_filters import filter_buys, filter_sells, filter_currency
-from helpers.market_helpers import market_for_currency
+from utilities.order_filters import filter_buys, filter_sells, filter_currency
+from utilities.market_helpers import market_for_currency
 
 
 __PRECISION = 12

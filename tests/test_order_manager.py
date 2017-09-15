@@ -1,7 +1,7 @@
 from unittest import TestCase
 from unittest.mock import patch
 
-from data.order_manager import cancel_all_opened_sell_orders, sell_all_limit
+from data.order_manager import cancel_all_opened_sell_orders, sell_all_limit, put_sell_all_limit_order
 
 
 class TestOrderManager(TestCase):
@@ -42,4 +42,17 @@ class TestOrderManager(TestCase):
         cancel_all_opened_sell_orders("BTC-DIO")
 
         self.assertEqual(mock_cancel_order.call_count, 0)
+
+    @patch("data.order_manager.cancel_all_opened_sell_orders")
+    @patch("data.order_manager.sell_all_limit")
+    def test_put_sell_limit_order_cancels_then_put(self, mock_sell_all_limit, mock_cancel_all_opened_orders):
+        mock_sell_all_limit.return_value = "test"
+        test_market = "BTC-DIO"
+        test_rate = 42
+
+        result = put_sell_all_limit_order(test_market, rate=test_rate)
+
+        mock_cancel_all_opened_orders.assert_called_with(test_market)
+        mock_sell_all_limit.assert_called_with(test_market, test_rate)
+        self.assertEquals("test", result)
 

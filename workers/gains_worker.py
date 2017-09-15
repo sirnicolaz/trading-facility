@@ -2,8 +2,8 @@ from api.public_api import get_ticker
 from data.data_pre_processing import consolidated_user_orders
 from data.gain_calculator import get_gain
 from data.profit_calculator import get_profit
-from helpers.order_filters import filter_currency
-from helpers.market_helpers import market_for_currency
+from utilities.order_filters import filter_currency
+from utilities.market_helpers import market_for_currency
 
 
 def calculate_gains(currency, order_value):

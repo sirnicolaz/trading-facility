@@ -1,10 +1,27 @@
 import copy
-from environment import REFERENCE_CURRENCY
+import csv
+from datetime import datetime
+
+from api.account_api import get_order_history
+from environment import REFERENCE_CURRENCY, ORDER_HISTORY_FILE
 from functools import reduce
 from itertools import groupby
-from data.order_manager import load_order_history
 from data.conversion_manager import convert_orders_to_btc, convert_orders_to_eth
-from helpers.order_filters import filter_buys, filter_sells
+from utilities.order_filters import filter_buys, filter_sells
+
+
+def __generate_history_entry(row):
+    return {
+        "OrderUuid": row[0],
+        "Exchange": row[1],
+        "Closed": datetime.strptime(row[8], '%m/%d/%Y %H:%M:%S %p').strftime('%Y-%m-%dT%H:%M:%S.%f'),
+        "Opened": datetime.strptime(row[7], '%m/%d/%Y %H:%M:%S %p').strftime('%Y-%m-%dT%H:%M:%S.%f'),
+        "OrderType": row[2],
+        "Quantity": float(row[3]),
+        "QuantityRemaining": 0,
+        "PricePerUnit": float(row[4]),
+        "Price": float(row[6])
+    }
 
 
 def __subtract_sells_from_buys(sells, buys):
@@ -73,3 +90,22 @@ def remove_sells_from_buys(orders):
 def consolidated_user_orders():
     orders = load_order_history()
     return __consolidate_orders(orders)
+
+
+# It uses both local orders and remote history (Bittrex only keeps last month of orders,
+# so they need to be enriched with local data)
+def load_order_history():
+    orders = []
+    if ORDER_HISTORY_FILE is not None:
+        csv_file = open(ORDER_HISTORY_FILE)
+        content = csv.reader(csv_file)
+        rows = [row for row in content][1:]
+        orders = [__generate_history_entry(row) for row in rows]
+
+    recent_orders = get_order_history()
+    existing_uuids = list(map(lambda order: order['OrderUuid'], orders))
+    for order in recent_orders:
+        if order['OrderUuid'] not in existing_uuids:
+            orders += [order]
+
+    return orders
