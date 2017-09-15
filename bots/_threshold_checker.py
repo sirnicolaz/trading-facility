@@ -1,5 +1,5 @@
 from data.gain_calculator import get_current_gain_for_currency
-from data.order_manager import put_sell_all_limit_order
+from data.order_maker import force_put_sell_all_limit_order
 from utilities.market_helpers import market_for_currency
 from api.public_api import get_ticker
 import time
@@ -19,7 +19,7 @@ def conditional_sell_loop_wrapper(compare_fun):
         market = market_for_currency(currency)
         current_price = get_ticker(market)['Last']
         print("Sell order for %s @%s" % (currency, str(current_price)))
-        put_sell_all_limit_order(market, current_price)
+        force_put_sell_all_limit_order(market, current_price)
 
     return conditional_sell_loop
 

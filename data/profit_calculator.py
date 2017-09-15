@@ -1,6 +1,6 @@
 from api.account_api import get_balance
 from api.public_api import get_ticker
-from data import data_pre_processing
+from data import orders_controller
 from utilities.order_filters import filter_buys, filter_sells, filter_currency
 from utilities.market_helpers import market_for_currency
 
@@ -43,7 +43,7 @@ def __calculate_profit(orders, currency, sell_price):
         'PricePerUnit': sell_price
     }]
 
-    squashed_orders = data_pre_processing.remove_sells_from_buys(orders)
+    squashed_orders = orders_controller.remove_sells_from_buys(orders)
     new_profit = __get_profit_for_orders(fake_order + squashed_orders)
 
     return new_profit

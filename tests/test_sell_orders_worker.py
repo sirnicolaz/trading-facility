@@ -6,7 +6,7 @@ from workers.sell_orders_worker import put_order_loop
 
 
 class TestSellOrdersWorker(TestCase):
-    @patch("workers.sell_orders_worker.put_sell_all_limit_order")
+    @patch("workers.sell_orders_worker.force_put_sell_all_limit_order")
     def test_put_order_loop(self, mock_put_sell_all_limit_order):
         test_return_result = {'success': 'true'}
         mock_put_sell_all_limit_order.return_value = test_return_result
@@ -48,7 +48,7 @@ class TestSellOrdersWorker(TestCase):
         else:
             self.fail()
 
-    @patch("workers.sell_orders_worker.put_sell_all_limit_order")
+    @patch("workers.sell_orders_worker.force_put_sell_all_limit_order")
     def test_put_order_loop_failed_request(self, mock_put_sell_all_limit_order):
         test_return_result = {'success': 'false', 'message': 'test message'}
         mock_put_sell_all_limit_order.return_value = test_return_result

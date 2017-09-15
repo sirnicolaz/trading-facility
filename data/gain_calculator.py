@@ -1,5 +1,5 @@
 from api.public_api import get_ticker
-from data import data_pre_processing
+from data import orders_controller
 from utilities.fin_math import percentage_gain
 from utilities.order_filters import filter_currency
 
@@ -28,20 +28,20 @@ def __get_gain_for_value(buy_orders, value):
 
 
 def get_gain(orders, new_value):
-    buy_orders = data_pre_processing.remove_sells_from_buys(orders)
+    buy_orders = orders_controller.remove_sells_from_buys(orders)
 
     return __get_gain_for_value(buy_orders, new_value)
 
 
 def get_current_gain(orders):
-    buy_orders = data_pre_processing.remove_sells_from_buys(orders)
+    buy_orders = orders_controller.remove_sells_from_buys(orders)
     current_value = get_ticker(buy_orders[0]['Exchange'])['Last']
 
     return __get_gain_for_value(buy_orders, current_value)
 
 
 def get_current_gain_for_currency(currency):
-    orders = data_pre_processing.consolidated_user_orders()
+    orders = orders_controller.consolidated_user_orders()
     currency_orders = filter_currency(currency=currency, orders=orders)
 
     return get_current_gain(currency_orders)

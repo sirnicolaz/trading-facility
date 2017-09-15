@@ -19,7 +19,7 @@ def sell_all_limit(market, rate):
     return put_sell_limit(market, balance, rate)
 
 
-def put_sell_all_limit_order(market, rate):
+def force_put_sell_all_limit_order(market, rate):
     cancel_all_opened_sell_orders(market)
     return sell_all_limit(market, rate)
 

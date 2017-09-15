@@ -1,4 +1,4 @@
-from data.order_manager import put_sell_all_limit_order
+from data.order_maker import force_put_sell_all_limit_order
 
 
 def put_order_loop(connection):
@@ -11,7 +11,7 @@ def put_order_loop(connection):
                 raise ValueError("Only limit orders currently supported")
 
             rate = float(query["rate"])
-            result = put_sell_all_limit_order(market=market, rate=rate)
+            result = force_put_sell_all_limit_order(market=market, rate=rate)
             if result['success'] == 'true':
                 connection.send({'success': True})
             else:
