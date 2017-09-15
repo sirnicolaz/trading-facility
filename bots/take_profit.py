@@ -1,4 +1,5 @@
-from bots.__threshold_checker import conditional_sell_loop_take_profit
+from ._threshold_checker import conditional_sell_loop_take_profit
+
 
 def run(*argv):
     currency = argv[0]

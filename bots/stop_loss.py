@@ -1,4 +1,4 @@
-from bots.__threshold_checker import conditional_sell_loop_stop_loss
+from ._threshold_checker import conditional_sell_loop_stop_loss
 
 
 def run(*argv):

@@ -28,14 +28,14 @@ def __get_gain_for_value(buy_orders, value):
 
 
 def get_current_gain(orders):
-    buy_orders = data_pre_processing.squash_sells_into_buys(orders)
+    buy_orders = data_pre_processing.remove_sells_from_buys(orders)
     current_value = get_ticker(buy_orders[0]['Exchange'])['Last']
 
     return __get_gain_for_value(buy_orders, current_value)
 
 
 def get_gain(orders, new_value):
-    buy_orders = data_pre_processing.squash_sells_into_buys(orders)
+    buy_orders = data_pre_processing.remove_sells_from_buys(orders)
 
     return __get_gain_for_value(buy_orders, new_value)
 

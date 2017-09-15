@@ -16,15 +16,16 @@ def __get_profit_for_orders(orders):
     for sell in reversed(sells):
         sell_capacity = sell['ActualQuantity']
         sell_price = sell['PricePerUnit']
+
         for buy in reversed(buys):
             if sell_capacity <= 0:
                 break
 
             buy_price = buy['PricePerUnit']
             sold_amount = min(sell_capacity, buy['ActualQuantity'])
-            earned_btc = sold_amount * sell_price
-            partial_profit_btc = earned_btc - (sold_amount * buy_price)
-            total_profit_btc = round(total_profit_btc + partial_profit_btc, __PRECISION)
+            earned_units = sold_amount * sell_price
+            partial_profit_units = earned_units - (sold_amount * buy_price)
+            total_profit_btc = round(total_profit_btc + partial_profit_units, __PRECISION)
 
             sell_capacity -= sold_amount
             buy['ActualQuantity'] -= sold_amount
@@ -42,7 +43,7 @@ def __calculate_profit(orders, currency, sell_price):
         'PricePerUnit': sell_price
     }]
 
-    squashed_orders = data_pre_processing.squash_sells_into_buys(orders)
+    squashed_orders = data_pre_processing.remove_sells_from_buys(orders)
     new_profit = __get_profit_for_orders(fake_order + squashed_orders)
 
     return new_profit

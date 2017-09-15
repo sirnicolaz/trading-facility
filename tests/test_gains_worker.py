@@ -6,7 +6,7 @@ from workers.gains_worker import calculate_gains
 
 class TestGainsWorker(TestCase):
     @patch("workers.gains_worker.get_ticker")
-    @patch("workers.gains_worker.simplified_user_orders")
+    @patch("workers.gains_worker.consolidated_user_orders")
     def test_calculate_gains(self, mock_simplified_user_orders, mock_get_ticker):
         test_currency = "STORJ"
         mock_simplified_user_orders.return_value = self.__mocked_orders(test_currency)

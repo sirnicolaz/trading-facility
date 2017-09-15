@@ -22,7 +22,9 @@ def __generate_history_entry(row):
     }
 
 
-def load_or_fetch_order_history():
+# It uses both local orders and remote history (Bittrex only keeps last month of orders,
+# so they need to be enriched with local data)
+def load_order_history():
     orders = []
     if ORDER_HISTORY_FILE is not None:
         csv_file = open(ORDER_HISTORY_FILE)
@@ -37,6 +39,7 @@ def load_or_fetch_order_history():
             orders += [order]
 
     return orders
+
 
 def cancel_all_opened_sell_orders(market):
     all_opened_orders = get_opened_orders(market)

@@ -8,7 +8,7 @@ from workers.sell_orders_worker import put_sell_all_limit_order, put_order_loop
 class TestSellOrdersWorker(TestCase):
 
     @patch("workers.sell_orders_worker.cancel_all_opened_sell_orders")
-    @patch("workers.sell_orders_worker.sell_all_limit")
+    @patch("workers.sell_orders_worker.put_sell_all_limit_order")
     def test_put_sell_limit_order_cancels_then_put(self, mock_sell_all_limit, mock_cancel_all_opened_orders):
         mock_sell_all_limit.return_value = "test"
         test_market = "BTC-DIO"
@@ -21,7 +21,7 @@ class TestSellOrdersWorker(TestCase):
         self.assertEquals("test", result)
 
     @patch("workers.sell_orders_worker.cancel_all_opened_sell_orders")
-    @patch("workers.sell_orders_worker.sell_all_limit")
+    @patch("workers.sell_orders_worker.put_sell_all_limit_order")
     def test_put_order_loop(self, mock_sell_all_limit, mock_cancel_all_opened_orders):
         test_return_result = {'success': 'true'}
         mock_sell_all_limit.return_value = test_return_result
@@ -65,7 +65,7 @@ class TestSellOrdersWorker(TestCase):
             self.fail()
 
     @patch("workers.sell_orders_worker.cancel_all_opened_sell_orders")
-    @patch("workers.sell_orders_worker.sell_all_limit")
+    @patch("workers.sell_orders_worker.put_sell_all_limit_order")
     def test_put_order_loop_failed_request(self, mock_sell_all_limit, mock_cancel_all_opened_orders):
         test_return_result = {'success': 'false', 'message': 'test message'}
         mock_sell_all_limit.return_value = test_return_result
