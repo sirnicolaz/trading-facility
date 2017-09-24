@@ -34,8 +34,7 @@ def get_verification_token():
 
     response = _PIPE_PARENT.recv()
 
-    encoding = response.info().get_content_charset('utf8')
-    content = response.read().decode(encoding)
+    content = response.decode("utf-8")
     tree = html.fromstring(content)
 
     token = tree.xpath('//input[@name="__RequestVerificationToken"]')[0].value
@@ -60,8 +59,7 @@ def put_sell_order(query):
     })
     response = _PIPE_PARENT.recv()
 
-    encoding = response.info().get_content_charset('utf8')
-    data = json.loads(response.read().decode(encoding))
+    data = json.loads(response.decode('utf-8'))
 
     return data
 

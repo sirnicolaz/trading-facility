@@ -1,7 +1,7 @@
 from api.public_api import get_ticker
-from data.orders_controller import consolidated_user_orders
-from data.gain_calculator import get_gain
-from data.profit_calculator import get_profit
+from controllers.orders_controller import consolidated_user_orders
+from controllers.gain_calculator import get_gain
+from controllers.profit_calculator import get_profit
 from utilities.order_filters import filter_currency
 from utilities.market_helpers import market_for_currency
 

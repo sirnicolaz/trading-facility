@@ -1,5 +1,5 @@
-from data.gain_calculator import get_current_gain_for_currency
-from data.order_maker import force_put_sell_all_limit_order
+from controllers.gain_calculator import get_current_gain_for_currency
+from controllers.order_maker import force_put_sell_all_limit_order
 from utilities.market_helpers import market_for_currency
 from api.public_api import get_ticker
 import time

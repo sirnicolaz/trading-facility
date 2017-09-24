@@ -1,7 +1,7 @@
 from unittest import TestCase
 from unittest.mock import patch
 
-from data.order_maker import cancel_all_opened_sell_orders, sell_all_limit, force_put_sell_all_limit_order
+from controllers.order_maker import cancel_all_opened_sell_orders, sell_all_limit, force_put_sell_all_limit_order
 
 
 class TestOrderMaker(TestCase):

@@ -1,7 +1,7 @@
 from unittest import TestCase
 from unittest.mock import patch
 
-from data.profit_calculator import get_current_profit
+from controllers.profit_calculator import get_current_profit
 
 
 class TestCurrentProfitCalculator(TestCase):

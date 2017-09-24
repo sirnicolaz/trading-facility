@@ -1,8 +1,8 @@
 from itertools import groupby
 from time import sleep
-from data.orders_controller import consolidated_user_orders
-from data.profit_calculator import get_current_profit, get_achieved_profit
-from data.gain_calculator import get_current_gain
+from controllers.orders_controller import consolidated_user_orders
+from controllers.profit_calculator import get_current_profit, get_achieved_profit
+from controllers.gain_calculator import get_current_gain
 from api.public_api import get_ticker
 from utilities.market_helpers import extract_currency
 

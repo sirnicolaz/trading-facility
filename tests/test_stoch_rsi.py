@@ -1,7 +1,8 @@
+import random
 from unittest import TestCase
 from unittest.mock import patch
-from monitoring.stochrsi_strategy import stoch_rsi, is_overbought, is_overssold
-import random
+
+from technical_analysis.stochrsi import stoch_rsi, is_overbought, is_overssold
 
 
 class TestStochRsi(TestCase):

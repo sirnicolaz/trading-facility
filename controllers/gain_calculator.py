@@ -1,5 +1,5 @@
 from api.public_api import get_ticker
-from data import orders_controller
+from controllers import orders_controller
 from utilities.fin_math import percentage_gain
 from utilities.order_filters import filter_currency
 

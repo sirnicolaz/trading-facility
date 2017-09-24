@@ -1,5 +1,5 @@
 from unittest import TestCase
-from data.profit_calculator import get_achieved_profit
+from controllers.profit_calculator import get_achieved_profit
 
 
 class TestSellProfitCalculator(TestCase):

@@ -1,6 +1,6 @@
 from unittest import TestCase
 from unittest.mock import patch
-from data.conversion_manager import convert_orders_to_btc, convert_orders_to_eth
+from controllers.conversion_manager import convert_orders_to_btc, convert_orders_to_eth
 
 
 class TestConversionManager(TestCase):

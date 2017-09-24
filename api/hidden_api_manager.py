@@ -5,8 +5,10 @@ __COOKIES_FILE = os.environ.get("COOKIES_FILE")
 
 
 def __update_cookies(response):
-    with open(__COOKIES_FILE, "w") as text_file:
-        text_file.write(response.headers['Set-Cookie'])
+    new_cookies = response.headers['Set-Cookie']
+    if new_cookies is not None:
+        with open(__COOKIES_FILE, "w") as text_file:
+            text_file.write(new_cookies)
 
 
 def __get_cookies():
@@ -46,7 +48,7 @@ def request_handling_loop(queue):
         q.add_header('Connection', 'keep-alive')
 
         if query:
-            q.data = query
+            q.data = query.encode('utf-8')
 
         response = urlopen(q)
 

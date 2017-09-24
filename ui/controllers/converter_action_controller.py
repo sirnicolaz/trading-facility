@@ -1,6 +1,6 @@
 import npyscreen
 import re
-from data.conversion_manager import convert
+from controllers.conversion_manager import convert
 from ui.helpers.command_line_parsing import parse_conversion_command
 
 
