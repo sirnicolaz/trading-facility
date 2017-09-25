@@ -1,6 +1,7 @@
 from environment import API_SECRET, API_KEY
 from api.endpoints.bittrex_endpoints import MarketEndpoints
-from api.request_handler import get_auth, put_sell_order
+from api.request_handler import get_auth
+from api.private_api import put_sell_order
 
 
 def __fetch(url):

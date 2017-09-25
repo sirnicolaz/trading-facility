@@ -39,16 +39,21 @@ def request_handling_loop(queue):
             q.data = query.encode('utf-8')
 
         attempts = 0
+        response = None
 
         while attempts < 3:
             try:
                 response = urlopen(q)
-                break
+                attempts = 3
             except URLError as e:
                 attempts += 1
                 print("Error opening url: %s" % str(e))
 
-        cookie_store.update_private_api_cookie(response.headers["Set-Cookie"])
+        if response is not None:
+            cookie_store.update_private_api_cookie(response.headers["Set-Cookie"])
+            data = response.read()
+        else:
+            data = None
 
         if response_pipe:
-            response_pipe.send(response.read())
+            response_pipe.send(data)

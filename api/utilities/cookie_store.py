@@ -1,16 +1,18 @@
-import os
-import re
-
-__COOKIES_FILE = os.environ.get("COOKIES_FILE")
+from environment import COOKIES_FILE
 
 
 def get_private_api_cookie():
-    return open(__COOKIES_FILE, "r").read().replace('\n', '')
+    file = open(COOKIES_FILE, "r")
+    cookie = file.read().replace('\n', '')
+    file.close()
+
+    return cookie
 
 
 def update_private_api_cookie(set_cookie_header):
+    print(COOKIES_FILE)
     if set_cookie_header is not None:
-        with open(__COOKIES_FILE, "r+") as cookie_file:
+        with open(COOKIES_FILE, "r+") as cookie_file:
             cookie = cookie_file.read()
             cookie_file.seek(0)
 

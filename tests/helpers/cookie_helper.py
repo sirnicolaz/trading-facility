@@ -1,8 +1,12 @@
-MOCK_COOKIES_PATH="resources/cookies.txt"
+MOCK_COOKIES_PATH="/tmp/cookies.txt"
 
 
 def get_mock_cookie():
-    return open(MOCK_COOKIES_PATH, "r").read().replace('\n', '')
+    file = open(MOCK_COOKIES_PATH, "r")
+    cookie = file.read().replace('\n', '')
+    file.close()
+
+    return cookie
 
 
 def store_mock_cookie(mock_cookie):
