@@ -65,3 +65,10 @@ def put_sell_order(query):
     data = json.loads(response.decode('utf-8'))
 
     return data
+
+
+def put_conditional_sell_limit(market, quantity, rate, target):
+    query = 'MarketName=%s&OrderType=LIMIT&Quantity=%s&Rate=%s&TimeInEffect=GOOD_TIL_CANCELLED&' \
+            'ConditionType=LESS_THAN&Target=%s' % (market, quantity, rate, target)
+
+    return put_sell_order(query)

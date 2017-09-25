@@ -10,7 +10,6 @@ def get_private_api_cookie():
 
 
 def update_private_api_cookie(set_cookie_header):
-    print(COOKIES_FILE)
     if set_cookie_header is not None:
         with open(COOKIES_FILE, "r+") as cookie_file:
             cookie = cookie_file.read()
