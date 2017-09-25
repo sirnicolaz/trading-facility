@@ -13,6 +13,6 @@ def keep_alive_loop(queue):
             'url': url,
             'accept': accept
         })
-
-        sleep(randint(60, 200))
+        print("keep alive")
+        sleep(randint(10, 20))
 

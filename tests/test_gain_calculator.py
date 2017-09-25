@@ -5,7 +5,7 @@ from controllers.gain_calculator import *
 
 class TestGainCalculator(TestCase):
 
-    @patch("data.gain_calculator.get_ticker")
+    @patch("controllers.gain_calculator.get_ticker")
     def test_get_all_gains(self, mock_get_ticker):
         mock_get_ticker.return_value = self.__mock_ticker()
         orders = [{
@@ -21,8 +21,7 @@ class TestGainCalculator(TestCase):
 
         self.assertEqual(100, result)
 
-
-    @patch("data.gain_calculator.get_ticker")
+    @patch("controllers.gain_calculator.get_ticker")
     def test_get_gain_for_currency_with_sells(self, mock_get_ticker):
         mock_get_ticker.return_value = self.__mock_ticker()
         test_exchange = 'BTC-OMG'

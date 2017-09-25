@@ -1,18 +1,6 @@
 from urllib.request import Request, urlopen
-import os
-
-__COOKIES_FILE = os.environ.get("COOKIES_FILE")
-
-
-def __update_cookies(response):
-    new_cookies = response.headers['Set-Cookie']
-    if new_cookies is not None:
-        with open(__COOKIES_FILE, "w") as text_file:
-            text_file.write(new_cookies)
-
-
-def __get_cookies():
-    return open(__COOKIES_FILE, "r").read().replace('\n', '')
+from urllib.error import URLError
+from api.utilities import cookie_store
 
 
 def __add_default_headers(request):
@@ -35,7 +23,7 @@ def request_handling_loop(queue):
         response_pipe = data['response_pipe'] if 'response_pipe' in data else None
 
         q = Request(url)
-        cookies = __get_cookies()
+        cookies = cookie_store.get_private_api_cookie()
         q.add_header('Cookie', cookies)
         q.add_header('Accept', accept)
 
@@ -50,9 +38,17 @@ def request_handling_loop(queue):
         if query:
             q.data = query.encode('utf-8')
 
-        response = urlopen(q)
+        attempts = 0
 
-        __update_cookies(response)
+        while attempts < 3:
+            try:
+                response = urlopen(q)
+                break
+            except URLError as e:
+                attempts += 1
+                print("Error opening url: %s" % str(e))
+
+        cookie_store.update_private_api_cookie(response.headers["Set-Cookie"])
 
         if response_pipe:
             response_pipe.send(response.read())

@@ -23,4 +23,4 @@ def run(*argv):
     currency = argv[0]
     max_price = float(argv[1])
     _private_apis_handler.start()
-    dummy_dynamic_stop_loss(currency, max_price)
+    #dummy_dynamic_stop_loss(currency, max_price)

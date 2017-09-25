@@ -6,7 +6,7 @@ from technical_analysis.stochrsi import stoch_rsi, is_overbought, is_overssold
 
 
 class TestStochRsi(TestCase):
-    @patch("monitoring.stochrsi_strategy.historical_api.get_historical_hour")
+    @patch("technical_analysis.stochrsi.historical_api.get_historical_hour")
     def test_stoch_rsi(self, mock_get_historical_hour):
         mock_get_historical_hour.return_value = [{'close': random.uniform(0.5, 1.9)} for _ in range(101)]
         market = "BTC-QTUM"
@@ -16,7 +16,7 @@ class TestStochRsi(TestCase):
         self.assertEqual(101, len(result[0]))
         self.assertEqual(101, len(result[1]))
 
-    @patch("monitoring.stochrsi_strategy.historical_api.get_historical_hour")
+    @patch("technical_analysis.stochrsi.historical_api.get_historical_hour")
     def test_stoch_rsi_currencies(self, mock_get_historical_hour):
         mock_get_historical_hour.return_value = [{'close': 0.1} for i in range(0,101)]
         market = "BTC-QTUM"

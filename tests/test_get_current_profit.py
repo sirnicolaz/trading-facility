@@ -5,8 +5,8 @@ from controllers.profit_calculator import get_current_profit
 
 
 class TestCurrentProfitCalculator(TestCase):
-    @patch("data.profit_calculator.get_ticker")
-    @patch("data.profit_calculator.get_balance")
+    @patch("controllers.profit_calculator.get_ticker")
+    @patch("controllers.profit_calculator.get_balance")
     def test_get_current_profit_base_case(self, mock_get_balance, mock_get_ticker):
         mock_get_ticker.return_value = {'Last': 0.4}
         mock_get_balance.return_value = {'Balance': 5.0}
@@ -23,8 +23,8 @@ class TestCurrentProfitCalculator(TestCase):
         expected_result = 1
         self.assertEqual(expected_result, result)
 
-    @patch("data.profit_calculator.get_ticker")
-    @patch("data.profit_calculator.get_balance")
+    @patch("controllers.profit_calculator.get_ticker")
+    @patch("controllers.profit_calculator.get_balance")
     def test_get_current_profit_with_history(self, mock_get_balance, mock_get_ticker):
         mock_get_ticker.return_value = {'Last': 0.4}
         mock_get_balance.return_value = {'Balance': 3.0}
@@ -50,8 +50,8 @@ class TestCurrentProfitCalculator(TestCase):
         expected_result = 0.6
         self.assertEqual(expected_result, result)
 
-    @patch("data.profit_calculator.get_ticker")
-    @patch("data.profit_calculator.get_balance")
+    @patch("controllers.profit_calculator.get_ticker")
+    @patch("controllers.profit_calculator.get_balance")
     def test_get_current_profit_with_complex_history(self, mock_get_balance, mock_get_ticker):
         mock_get_ticker.return_value = {'Last': 0.4}
         mock_get_balance.return_value = {'Balance': 6.0}

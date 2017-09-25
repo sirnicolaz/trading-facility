@@ -7,9 +7,9 @@ class HistoricalEndpoints:
         return DATA_API + path
 
     @staticmethod
-    def get_history_hour(from_currency, to_currency, limit):
-        return HistoricalEndpoints.__absolute_url("/histohour?fsym=%s&tsym=%s&limit=%s&e=BitTrex"
-                                                  % (from_currency, to_currency, limit))
+    def get_history_hour(from_currency, to_currency, limit, aggregate):
+        return HistoricalEndpoints.__absolute_url("/histohour?fsym=%s&tsym=%s&limit=%s&e=BitTrex&aggregate=%s"
+                                                  % (from_currency, to_currency, limit, aggregate))
 
     @staticmethod
     def get_price_historical(from_currency, to_currency, timestamp):

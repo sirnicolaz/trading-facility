@@ -12,13 +12,6 @@ def put_sell_limit(market, quantity, rate):
 
 
 def put_conditional_sell_limit(market, quantity, rate, target):
-    if isinstance(rate, float):
-        rate = "%.15f" % rate
-    if isinstance(target, float):
-        target = "%.15f" % target
-    if isinstance(quantity, float):
-        quantity = "%.15f" % quantity
-
     query = 'MarketName=%s&OrderType=LIMIT&Quantity=%s&Rate=%s&TimeInEffect=GOOD_TIL_CANCELLED&' \
             'ConditionType=LESS_THAN&Target=%s' % (market, quantity, rate, target)
 

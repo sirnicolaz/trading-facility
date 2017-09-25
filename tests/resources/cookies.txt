@@ -1,1 +1,1 @@
-other cookie
+.AspNet.ApplicationCookie=new

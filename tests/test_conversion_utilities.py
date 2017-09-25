@@ -4,7 +4,7 @@ from controllers.conversion_manager import convert_orders_to_btc, convert_orders
 
 
 class TestConversionManager(TestCase):
-    @patch("data.conversion_manager.get_price")
+    @patch("controllers.conversion_manager.get_price")
     def test_get_gain_for_eth_exchange(self, mock_get_price):
         mock_get_price.return_value = 0.05
         orders = [{
@@ -27,7 +27,7 @@ class TestConversionManager(TestCase):
 
         self.assertListEqual(expected_result, result)
 
-    @patch("data.conversion_manager.get_price")
+    @patch("controllers.conversion_manager.get_price")
     def test_get_gain_for_eth_exchange(self, mock_get_price):
         mock_get_price.return_value = 0.05
         orders = [{
