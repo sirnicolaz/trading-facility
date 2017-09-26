@@ -3,7 +3,7 @@ from api.market_api import get_opened_orders, cancel_order, put_sell_limit
 from api.private_api import put_conditional_sell_limit, is_alive
 from utilities.market_helpers import extract_currency
 from utilities.order_filters import filter_sells
-
+import time
 
 def cancel_all_opened_sell_orders(market):
     all_opened_orders = get_opened_orders(market)
@@ -26,7 +26,7 @@ def force_put_sell_all_limit_order(market, rate):
 
 def force_put_conditional_sell_all_order(market, rate):
     if is_alive():
-        balance = get_balance(extract_currency(market))['Available']
+        balance = get_balance(extract_currency(market))['Balance']
         truncated_balance = "%.15f" % float(balance)
         truncated_rate = "%.15f" % float(rate)
 

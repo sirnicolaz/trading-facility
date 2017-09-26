@@ -10,5 +10,5 @@ def keep_alive_loop():
         if is_alive() == False:
             break
 
-        sleep(randint(10, 20))
+        sleep(randint(10, 60))
 
