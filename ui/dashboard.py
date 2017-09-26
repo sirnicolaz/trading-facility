@@ -14,7 +14,7 @@ class Dashboard(npyscreen.NPSAppManaged):
 
     def onStart(self):
         self.addForm('MAIN', CoinsStatus , data_producer=self.data_producer)
-        self.addForm('MANAGECOINFM', ManageCoin, gains_worker_pipe=self.gains_worker_pipe)
+        self.addForm('MANAGECOINFM', ManageCoin, order_maker_worker_pipe=None, gains_worker_pipe=self.gains_worker_pipe)
         #self.addForm('STRATEGYFM', StrategyIndicatorsForm, lines=2, minimum_lines=1, columns=0, name='Strategies', editable=False)
 
 

@@ -1,4 +1,5 @@
 import npyscreen
+from environment import REFERENCE_CURRENCY
 
 
 class ManageCoinGrid(npyscreen.GridColTitles):
@@ -18,20 +19,21 @@ class ManageCoin(npyscreen.ActionPopup):
     DEFAULT_COLUMNS = 100
     DEFAULT_LINES = 16
 
-    def __init__(self, gains_worker_pipe, *args, **kwargs):
+    def __init__(self, gains_worker_pipe, order_maker_worker_pipe, *args, **kwargs):
         super(ManageCoin, self).__init__(*args, **kwargs)
         self.gains_worker_pipe = gains_worker_pipe
+        self.order_maker_worker_pipe = order_maker_worker_pipe
 
     def create(self):
         self.currency = None
         self.current_value = None
-        self.order = self.add(npyscreen.TitleText, name = "Order:", max_width=40, max_height=1)
+        self.order = self.add(npyscreen.TitleText, name = "order:", max_width=40, max_height=1)
         self.nextrely = 4
-        self.order_type = self.add(npyscreen.TitleSelectOne, name = "Type:", scroll_exit=True,
+        self.order_type = self.add(npyscreen.TitleSelectOne, name = "type:", scroll_exit=True,
                                    slow_scroll=True, max_width=40, max_height=2,
-                                   values=["Stop loss", "Limit"])
+                                   values=["stop loss", "take profit"])
         self.nextrely = 8
-        self.overview = self.add(ManageCoinGrid, name="Gains", editable=False)
+        self.overview = self.add(ManageCoinGrid, name="gains", editable=False)
         self.overview.values = [["0", "0", "0", "0", "0", "0", "0", "0"]]
 
     def set_current_value(self, current_value):
@@ -60,7 +62,14 @@ class ManageCoin(npyscreen.ActionPopup):
                 npyscreen.notify_confirm(data["exception"])
 
     def on_ok(self):
-        self.parentApp.switchFormPrevious()
+        order_type = ["stop_loss", "take_profit"][self.order_type.value[0]]
+        query = {"rate": self.order.value, "currency": self.currency, "type": order_type}
+        answer = npyscreen.notify_yes_no("You are going to place the following order:\n%s to %s @ %s\norder type: %s" \
+                                "\nDo you want to confirm?" %
+                                (self.currency.upper(), REFERENCE_CURRENCY.upper(), self.order.value, order_type))
+        if answer == True:
+            self.order_maker_worker_pipe.send(query)
+            self.parentApp.switchFormPrevious()
 
     def on_cancel(self):
         self.parentApp.switchFormPrevious()

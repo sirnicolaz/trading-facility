@@ -1,7 +1,8 @@
 from unittest import TestCase
 from unittest.mock import patch
 
-from controllers.order_maker import cancel_all_opened_sell_orders, sell_all_limit, force_put_sell_all_limit_order
+from controllers.order_maker import cancel_all_opened_sell_orders, sell_all_limit, force_put_sell_all_limit_order, \
+    force_put_conditional_sell_all_order
 
 
 class TestOrderMaker(TestCase):
@@ -55,4 +56,76 @@ class TestOrderMaker(TestCase):
         mock_cancel_all_opened_orders.assert_called_with(test_market)
         mock_sell_all_limit.assert_called_with(test_market, test_rate)
         self.assertEquals("test", result)
+
+    @patch("controllers.order_maker.cancel_all_opened_sell_orders")
+    @patch("controllers.order_maker.put_conditional_sell_limit")
+    @patch("controllers.order_maker.is_alive")
+    @patch("controllers.order_maker.get_balance")
+    def test_force_put_conditional_sell_all_order_alive(self, mock_get_balance, mock_is_alive,
+                                                        mock_put_conditional_sell_limit, mock_cancel_all_opened_orders):
+        mock_is_alive.return_value = True
+        mock_get_balance.return_value = {'Available': 0.5}
+        mock_put_conditional_sell_limit.return_value = "test result"
+
+        result = force_put_conditional_sell_all_order("BTC-EUR", "0.3")
+
+        self.assertTrue(mock_cancel_all_opened_orders.called)
+        self.assertEquals("test result", result)
+
+    @patch("controllers.order_maker.cancel_all_opened_sell_orders")
+    @patch("controllers.order_maker.put_conditional_sell_limit")
+    @patch("controllers.order_maker.is_alive")
+    @patch("controllers.order_maker.get_balance")
+    def test_force_put_conditional_sell_all_order_not_alive(self, mock_get_balance, mock_is_alive,
+                                                        mock_put_conditional_sell_limit, mock_cancel_all_opened_orders):
+        mock_is_alive.return_value = False
+
+        with self.assertRaises(ConnectionError) as _:
+            force_put_conditional_sell_all_order("any", "any")
+
+    @patch("controllers.order_maker.cancel_all_opened_sell_orders")
+    @patch("controllers.order_maker.put_conditional_sell_limit")
+    @patch("controllers.order_maker.is_alive")
+    @patch("controllers.order_maker.get_balance")
+    def test_force_put_conditional_sell_all_order_truncated_values(self, mock_get_balance, mock_is_alive,
+                                                                   mock_put_conditional_sell_limit,
+                                                                   mock_cancel_all_opened_orders):
+        mock_is_alive.return_value = True
+        mock_get_balance.return_value = {'Available': "0.54928749238472938472983"}
+        test_rate = "0.1283761287361283761"
+
+        force_put_conditional_sell_all_order("BTC-EUR", test_rate)
+
+        expected_rate = "0.128376128736128"
+        expected_balance = "0.549287492384729"
+        mock_put_conditional_sell_limit.assert_called_with("BTC-EUR",
+                                                           expected_balance, rate=expected_rate, target=expected_rate)
+
+    @patch("controllers.order_maker.cancel_all_opened_sell_orders")
+    @patch("controllers.order_maker.put_conditional_sell_limit")
+    @patch("controllers.order_maker.is_alive")
+    @patch("controllers.order_maker.get_balance")
+    def test_force_put_conditional_sell_all_order_cancel_and_sell(self, mock_get_balance, mock_is_alive,
+                                                                  mock_put_conditional_sell_limit,
+                                                                  mock_cancel_all_opened_orders):
+        mock_is_alive.return_value = True
+        mock_get_balance.return_value = {'Available': "0.54928749238472938472983"}
+
+        force_put_conditional_sell_all_order("BTC-EUR", "0.42")
+
+        self.assertTrue(mock_cancel_all_opened_orders.called)
+        self.assertTrue(mock_put_conditional_sell_limit.called)
+
+    @patch("controllers.order_maker.cancel_all_opened_sell_orders")
+    @patch("controllers.order_maker.put_conditional_sell_limit")
+    @patch("controllers.order_maker.is_alive")
+    @patch("controllers.order_maker.get_balance")
+    def test_force_put_conditional_sell_all_order_cancel_right_market(self, mock_get_balance, mock_is_alive,
+                                                                   _, mock_cancel_all_opened_orders):
+        mock_is_alive.return_value = True
+        mock_get_balance.return_value = {'Available': "0.54928749238472938472983"}
+        test_market = "BTC-EUR"
+        force_put_conditional_sell_all_order(test_market, "0.42")
+
+        mock_cancel_all_opened_orders.assert_called_with(test_market)
 

@@ -71,8 +71,10 @@ class CoinsStatus(npyscreen.FormMuttActive):
                 self.coin_values = list(map(lambda x: [x[0], x[1]], data))
                 self.wMain.values = data
                 self.update_title(datetime.datetime.now())
+                self.wStatus2.value = "converter"
 
         self.wMain.update()
+        self.wStatus2.update()
 
     def while_waiting(self):
         self.refresh_data()

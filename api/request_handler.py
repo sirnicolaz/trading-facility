@@ -1,14 +1,21 @@
 import urllib.request
 from urllib.request import Request, urlopen
+from urllib.error import URLError
 import json
 from uuid import uuid1
 import hmac
 
 
 def get(url):
-    response = urllib.request.urlopen(url)
-    encoding = response.info().get_content_charset('utf8')
-    data = json.loads(response.read().decode(encoding))
+    attempts = 3
+    while attempts > 0:
+        try:
+            response = urllib.request.urlopen(url)
+            encoding = response.info().get_content_charset('utf8')
+            data = json.loads(response.read().decode(encoding))
+            attempts = 0
+        except URLError:
+            attempts -= 1
 
     return data
 

@@ -35,6 +35,10 @@ def get_gain(orders, new_value):
 
 def get_current_gain(orders):
     buy_orders = orders_controller.remove_sells_from_buys(orders)
+
+    if len(buy_orders) == 0:
+        return 0.0
+
     current_value = get_ticker(buy_orders[0]['Exchange'])['Last']
 
     return __get_gain_for_value(buy_orders, current_value)

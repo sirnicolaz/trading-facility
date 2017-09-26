@@ -35,15 +35,15 @@ def get_verification_token():
 def is_alive():
     url = 'https://bittrex.com/Market/Index?MarketName=BTC-PAY'
     accept = 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8'
-    response_pipe = _PIPE_CHILD
+    parent_response_pipe, child_response_pipe = Pipe()
 
     QUEUE.put({
         "url": url,
         "accept": accept,
-        "response_pipe": response_pipe
+        "response_pipe": child_response_pipe
     })
 
-    response = _PIPE_PARENT.recv()
+    response = parent_response_pipe.recv()
 
     return response is not None
 
