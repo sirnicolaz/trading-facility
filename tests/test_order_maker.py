@@ -64,7 +64,7 @@ class TestOrderMaker(TestCase):
     def test_force_put_conditional_sell_all_order_alive(self, mock_get_balance, mock_is_alive,
                                                         mock_put_conditional_sell_limit, mock_cancel_all_opened_orders):
         mock_is_alive.return_value = True
-        mock_get_balance.return_value = {'Available': 0.5}
+        mock_get_balance.return_value = {'Balance': 0.5}
         mock_put_conditional_sell_limit.return_value = "test result"
 
         result = force_put_conditional_sell_all_order("BTC-EUR", "0.3")
@@ -91,7 +91,7 @@ class TestOrderMaker(TestCase):
                                                                    mock_put_conditional_sell_limit,
                                                                    mock_cancel_all_opened_orders):
         mock_is_alive.return_value = True
-        mock_get_balance.return_value = {'Available': "0.54928749238472938472983"}
+        mock_get_balance.return_value = {'Balance': "0.54928749238472938472983"}
         test_rate = "0.1283761287361283761"
 
         force_put_conditional_sell_all_order("BTC-EUR", test_rate)
@@ -109,7 +109,7 @@ class TestOrderMaker(TestCase):
                                                                   mock_put_conditional_sell_limit,
                                                                   mock_cancel_all_opened_orders):
         mock_is_alive.return_value = True
-        mock_get_balance.return_value = {'Available': "0.54928749238472938472983"}
+        mock_get_balance.return_value = {'Balance': "0.54928749238472938472983"}
 
         force_put_conditional_sell_all_order("BTC-EUR", "0.42")
 
@@ -123,7 +123,7 @@ class TestOrderMaker(TestCase):
     def test_force_put_conditional_sell_all_order_cancel_right_market(self, mock_get_balance, mock_is_alive,
                                                                    _, mock_cancel_all_opened_orders):
         mock_is_alive.return_value = True
-        mock_get_balance.return_value = {'Available': "0.54928749238472938472983"}
+        mock_get_balance.return_value = {'Balance': "0.54928749238472938472983"}
         test_market = "BTC-EUR"
         force_put_conditional_sell_all_order(test_market, "0.42")
 

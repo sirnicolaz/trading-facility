@@ -1,6 +1,6 @@
 from urllib.request import Request, urlopen
-from urllib.error import URLError
 from api.utilities import cookie_store
+import time
 
 
 def __add_default_headers(request):
@@ -45,9 +45,10 @@ def request_handling_loop(queue):
             try:
                 response = urlopen(q)
                 attempts = 3
-            except URLError as e:
+            except Exception as e:
                 attempts += 1
                 print("Error opening url: %s" % str(e))
+                time.sleep(2)
 
         if response is not None:
             cookie_store.update_private_api_cookie(response.headers["Set-Cookie"])

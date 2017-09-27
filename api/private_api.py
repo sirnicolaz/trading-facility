@@ -2,8 +2,6 @@ import json
 from lxml import html
 from multiprocessing import Pipe
 
-
-_PIPE_PARENT, _PIPE_CHILD = Pipe()
 QUEUE = None
 
 
@@ -15,14 +13,14 @@ def set_queue(queue):
 def get_verification_token():
     url = 'https://bittrex.com/Market/Index?MarketName=BTC-PAY'
     accept = 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8'
-    response_pipe = _PIPE_CHILD
+    response_pipe_parent, response_pipe_child = Pipe()
     QUEUE.put({
         "url": url,
         "accept": accept,
-        "response_pipe": response_pipe
+        "response_pipe": response_pipe_child
     })
 
-    response = _PIPE_PARENT.recv()
+    response = response_pipe_parent.recv()
 
     content = response.decode("utf-8")
     tree = html.fromstring(content)
@@ -57,7 +55,7 @@ def put_sell_order(query):
     response = response_pipe_parent.recv()
 
     data = json.loads(response.decode('utf-8'))
-    
+
     return data
 
 

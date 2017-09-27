@@ -21,7 +21,7 @@ def dynamic_stop_loss_loop(currency, timeframe_hours):
         except Exception as e:
             print("Temporary failure: %" % str(e))
 
-        time.sleep(60 * 30)
+        time.sleep(60 * 10) # update every ten minutes
 
 
 def run(*argv):
