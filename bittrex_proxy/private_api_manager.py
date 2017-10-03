@@ -1,6 +1,7 @@
-from urllib.request import Request, urlopen
-from api.utilities import cookie_store
 import time
+from urllib.request import Request, urlopen
+
+from bittrex_proxy.utilities import cookie_store
 
 
 def __add_default_headers(request):

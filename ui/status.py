@@ -10,7 +10,7 @@ class CoinsStatusGrid(npyscreen.GridColTitles):
             "col_titles": ["market", "last price", "gain", "sold profit", "sell all now profit"],
             "columns": 5,
             "select_whole_line": True,
-            "row_height": 2
+            "row_height": 1
         })
         super(CoinsStatusGrid, self).__init__(*args, **kwargs)
 

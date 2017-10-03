@@ -1,7 +1,7 @@
 from random import randint
 from time import sleep
-from api.private_api import is_alive
 
+from bittrex_proxy.private_api import is_alive
 
 
 def keep_alive_loop():

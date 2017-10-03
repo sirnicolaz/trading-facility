@@ -10,7 +10,7 @@ def set_queue(queue):
     QUEUE = queue
 
 
-def get_verification_token():
+def __get_verification_token():
     url = 'https://bittrex.com/Market/Index?MarketName=BTC-PAY'
     accept = 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8'
     response_pipe_parent, response_pipe_child = Pipe()
@@ -35,7 +35,7 @@ def get_verification_token():
 
 
 def is_alive():
-    token = get_verification_token()
+    token = __get_verification_token()
 
     return token is not None
 
@@ -44,7 +44,7 @@ def put_sell_order(query):
     url = 'https://bittrex.com/api/v2.0/auth/market/TradeSell'
     accept = 'application/json, text/javascript, */*; q=0.01'
     response_pipe_parent, response_pipe_child = Pipe()
-    auth_query = query + "&__RequestVerificationToken=%s" % get_verification_token()
+    auth_query = query + "&__RequestVerificationToken=%s" % __get_verification_token()
 
     QUEUE.put({
         'url': url,

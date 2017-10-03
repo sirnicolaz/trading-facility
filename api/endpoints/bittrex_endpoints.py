@@ -1,7 +1,11 @@
+from environment import BITTREX_PROXY_URL
+
 BASE_URL = "https://bittrex.com/api/v1.1/"
 PUBLIC_API = BASE_URL + "public/"
 ACCOUNT_API = BASE_URL + "account/"
 MARKET_API = BASE_URL + "market/"
+
+PRIVATE_MARKET_API = BITTREX_PROXY_URL
 
 
 class PublicEndpoints:
@@ -33,6 +37,21 @@ class PublicEndpoints:
     @staticmethod
     def get_market_history(market):
         return PUBLIC_API + "getmarkethistory?market=%s" % market
+
+
+class PrivateMarketEndpoints:
+    @staticmethod
+    def __absolute_url(path):
+        return PRIVATE_MARKET_API + path
+
+    @staticmethod
+    def put_conditional_sell(market, quantity, rate, target):
+        return PrivateMarketEndpoints.__absolute_url(
+            "conditional_sell?market=%s&quantity=%s&rate=%s&target=%s" % (market, quantity, rate, target))
+
+    @staticmethod
+    def is_alive():
+        return PrivateMarketEndpoints.__absolute_url("is_alive")
 
 
 class MarketEndpoints:

@@ -1,4 +1,4 @@
-from environment import COOKIES_FILE
+COOKIES_FILE="cookies.txt"
 
 
 def get_private_api_cookie():

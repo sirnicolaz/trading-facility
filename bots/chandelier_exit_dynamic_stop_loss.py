@@ -3,7 +3,6 @@ from technical_analysis.chandelier_exit import get_long_chandelier_exit
 from utilities.market_helpers import market_for_currency
 from controllers.order_maker import force_put_conditional_sell_all_order
 from api.account_api import get_balance
-from bots import _private_apis_handler
 import time
 
 
@@ -27,5 +26,4 @@ def dynamic_stop_loss_loop(currency, timeframe_hours):
 def run(*argv):
     currency = argv[0]
     timeframe = int(argv[1]) if len(argv) > 1 else 4
-    _private_apis_handler.start()
     dynamic_stop_loss_loop(currency, timeframe)

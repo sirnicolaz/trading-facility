@@ -1,9 +1,9 @@
 from api.account_api import get_balance
 from api.market_api import get_opened_orders, cancel_order, put_sell_limit
-from api.private_api import put_conditional_sell_limit, is_alive
+from api.private_market_api import put_conditional_sell_limit, is_alive
 from utilities.market_helpers import extract_currency
 from utilities.order_filters import filter_sells
-import time
+
 
 def __get_percentage_from_balance(market, percentage=100.0):
     balance = get_balance(extract_currency(market))['Balance']

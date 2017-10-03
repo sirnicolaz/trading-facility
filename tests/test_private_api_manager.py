@@ -1,17 +1,16 @@
 import threading
+from multiprocessing import Queue, Pipe
 from unittest import TestCase
 from unittest.mock import patch, MagicMock
 
-from multiprocessing import Queue, Pipe
-
-from api.private_api_manager import request_handling_loop
+from bittrex_proxy.private_api_manager import request_handling_loop
 
 
 class TestPrivateApiManager(TestCase):
-    @patch("api.private_api_manager.cookie_store.update_private_api_cookie")
-    @patch("api.private_api_manager.cookie_store.get_private_api_cookie")
-    @patch("api.private_api_manager.Request")
-    @patch("api.private_api_manager.urlopen")
+    @patch("bittrex_proxy.private_api_manager.cookie_store.update_private_api_cookie")
+    @patch("bittrex_proxy.private_api_manager.cookie_store.get_private_api_cookie")
+    @patch("bittrex_proxy.private_api_manager.Request")
+    @patch("bittrex_proxy.private_api_manager.urlopen")
     def test_request_handling_loop(self, mock_urlopen, mock_Request, mock_get_private_api_cookie,
                                    mock_update_private_api_cookie):
         mock_response = MagicMock()

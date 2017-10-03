@@ -9,7 +9,7 @@ class TestOrderMaker(TestCase):
     @patch("controllers.order_maker.get_balance")
     @patch("controllers.order_maker.put_sell_limit")
     def test_sell_all_limit(self, mock_put_sell_limit, mock_get_balance):
-        mock_get_balance.return_value = {'Available': 42}
+        mock_get_balance.return_value = {'Balance': 42}
         mock_put_sell_limit.return_value = 'test'
 
         result = sell_all_limit("BTC-DIO", 0.1)
@@ -54,7 +54,7 @@ class TestOrderMaker(TestCase):
         result = force_put_sell_all_limit_order(test_market, rate=test_rate)
 
         mock_cancel_all_opened_orders.assert_called_with(test_market)
-        mock_sell_all_limit.assert_called_with(test_market, test_rate)
+        mock_sell_all_limit.assert_called_with(test_market, test_rate, 100)
         self.assertEquals("test", result)
 
     @patch("controllers.order_maker.cancel_all_opened_sell_orders")
