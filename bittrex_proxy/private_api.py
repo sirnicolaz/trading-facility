@@ -42,9 +42,17 @@ def is_alive():
 
 def put_sell_order(query):
     url = 'https://bittrex.com/api/v2.0/auth/market/TradeSell'
+    return _perform_query(url, query)
+
+
+def _perform_query(url, query=None):
     accept = 'application/json, text/javascript, */*; q=0.01'
     response_pipe_parent, response_pipe_child = Pipe()
-    auth_query = query + "&__RequestVerificationToken=%s" % __get_verification_token()
+    auth_query = "__RequestVerificationToken=%s" % __get_verification_token()
+
+    if query is not None:
+        auth_query = query + "&" + auth_query
+
 
     QUEUE.put({
         'url': url,

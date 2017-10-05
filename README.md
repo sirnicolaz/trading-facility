@@ -17,12 +17,8 @@ API_SECRET=xxxx
 You can create the API key and secret in your own account. Make sure you give writing permissions if you want to be able to place orders via the cui or the bots.
 ## Order history
 Due to the bad implementation of the Bittrex APIs, only orders from the last month can be retrieved.
-In order to fix this, you need to get your orders via the private apis
-```
-https://bittrex.com/Api/v2.0/auth/orders/GetOrderHistory
-```
-Authentication cookies are required. Also, the json response has to be converted into a csv (not sure why this dumb decision).
-This will all be fixed and simplified soon. You can use the app also without this file and it will
+In order to fix this, to download the full history in cvs from your account, by clicking the "Load all"
+button in the Order page. You can use the app also without this file and it will
 just work with the last month of orders. In case you decide to get your orders from Bittrex directly, set the following env:
 ```
 ORDER_HISTORY_FILE=path to your order csv file
