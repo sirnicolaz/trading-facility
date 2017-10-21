@@ -57,7 +57,11 @@ So far only `rsi` and `macd_trend` trend are supported
 
 # Monitoring dashboard
 This will show full console screen the technical indicators for each coin.
-You can use the search bar to filter those that you want to see. Like:
+To start it:
+```bash
+python start_monitor.py
+```
+You can use the search bar to filter those coins that you want to see. Like:
 ```bash
 ADX MUSIC ETH
 ```
