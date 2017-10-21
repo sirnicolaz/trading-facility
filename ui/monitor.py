@@ -3,7 +3,6 @@ from ui.controllers.monitor_action_controller import MonitorActionController
 import npyscreen
 import datetime
 import operator
-import webbrowser
 
 
 class CoinsIndicatorsGrid(npyscreen.GridColTitles):
@@ -74,7 +73,7 @@ class CoinsIndicators(npyscreen.FormMuttActive):
 
                 market = data.pop("market")
                 rsi_value = data["rsi"]
-                if float(rsi_value) > 0:
+                if rsi_value and float(rsi_value) > 0:
                     self.markets[market] = data
 
         self.refresh_main_view()
