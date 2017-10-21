@@ -1,5 +1,5 @@
 from environment import REFERENCE_CURRENCY
-from ui.controllers.search_action_controller import ActionControllerSearch
+from ui.controllers.monitor_action_controller import MonitorActionController
 import npyscreen
 import datetime
 import operator
@@ -38,7 +38,7 @@ class CoinsIndicatorsGrid(npyscreen.GridColTitles):
 class CoinsIndicators(npyscreen.FormMuttActive):
     MAIN_WIDGET_CLASS = CoinsIndicatorsGrid
     MAIN_WIDGET_CLASS_START_LINE = 2
-    ACTION_CONTROLLER = ActionControllerSearch
+    ACTION_CONTROLLER = MonitorActionController
     COMMAND_WIDGET_CLASS = npyscreen.TextCommandBox
 
     def __init__(self, data_producer, *args, **kwargs):

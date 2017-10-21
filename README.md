@@ -61,11 +61,20 @@ To start it:
 ```bash
 python start_monitor.py
 ```
-You can use the search bar to filter those coins that you want to see. Like:
-```bash
-ADX MUSIC ETH
+## Available commands
+At the end of each command, press `enter` to clear the text bar.
+### search
+Search for specific coins, separate with spaces
 ```
-Just put a space between each. Press `enter` to reset.
+search ADX MUSIC
+```
+### open
+Open tradingview.com chart and twitter page (if exists)
+```bash
+open LTC BTC-QTUM XRP =
+```
+it works both with full market name and only coin name.
+Type `=` in order to trigger the opening.
 
 # Bots
 TODO. You can try to figure it out yourself in the meantime by looking at `run_bot.py`
