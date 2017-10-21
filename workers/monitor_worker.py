@@ -1,5 +1,6 @@
 from utilities.coins import COINS
 from threading import Thread
+from environment import COIN_SOCIAL_DIR
 from time import sleep
 import os.path
 
@@ -21,6 +22,13 @@ def update_coin(coin, connection):
             updates.update({indicator: None})
 
     if any([updates[indicator] is not None for indicator in indicators]):
+        try:
+            with open(COIN_SOCIAL_DIR + "/" + coin, "r") as file:
+                twitter_handle = file.read()
+                updates.update({"twitter": twitter_handle})
+        except:
+            updates.update({"twitter": ""})
+
         connection.put(updates)
 
 

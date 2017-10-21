@@ -3,13 +3,14 @@ from ui.controllers.search_action_controller import ActionControllerSearch
 import npyscreen
 import datetime
 import operator
+import webbrowser
 
 
 class CoinsIndicatorsGrid(npyscreen.GridColTitles):
     def __init__(self, *args, **kwargs):
         kwargs.update({
-            "col_titles": ["market", "RSI", "MACD trend", "ADX trend"],
-            "columns": 4,
+            "col_titles": ["market", "RSI", "MACD trend", "ADX trend", "twitter"],
+            "columns": 5,
             "select_whole_line": True,
             "row_height": 1
         })
@@ -89,8 +90,8 @@ class CoinsIndicators(npyscreen.FormMuttActive):
             searched_markets_string = "%".join(self.searched_markets.keys())
             markets = dict(filter(lambda market: market[0] in searched_markets_string, markets.items()))
 
-        grid_values = [[market, indicators["rsi"], indicators["macd-trend"], indicators["adx-trend"]]
-                       for market, indicators in markets.items()]
+        grid_values = [[market, indicators["rsi"], indicators["macd-trend"],
+                        indicators["adx-trend"], indicators["twitter"]] for market, indicators in markets.items()]
         sorted_grid_values = sorted(grid_values, key=operator.itemgetter(1))
 
         self.wMain.values = sorted_grid_values
