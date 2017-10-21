@@ -21,7 +21,7 @@ supported_indicators = ["rsi", "macd_trend", "adx_trend"]
 parser_tracker.add_argument('--indicators', '-i', type=str, nargs="*", choices=supported_indicators)
 
 parser_proxy = subparsers.add_parser('proxy', help="runs the bittrex proxy (to support conditional orders.")
-parser_proxy.add_argument('--cookies-file', '-c', type=str, help="path to the authenticated cookies file")
+parser_proxy.add_argument('--cookies-file', '-c', metavar="<file>", type=str, help="path to the authenticated cookies file")
 
 args = parser.parse_args()
 
