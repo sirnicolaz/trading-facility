@@ -8,8 +8,8 @@ import operator
 class CoinsIndicatorsGrid(npyscreen.GridColTitles):
     def __init__(self, *args, **kwargs):
         kwargs.update({
-            "col_titles": ["market", "RSI", "MACD trend"],
-            "columns": 3,
+            "col_titles": ["market", "RSI", "MACD trend", "ADX trend"],
+            "columns": 4,
             "select_whole_line": True,
             "row_height": 1
         })
@@ -19,9 +19,9 @@ class CoinsIndicatorsGrid(npyscreen.GridColTitles):
         try:
             value = cell_display_value
 
-            if value == "down":
+            if "down" in value:
                 actual_cell.color = 'DANGER'
-            elif value == "up":
+            elif "up" in value:
                 actual_cell.color = 'GOOD'
             elif float(value) < 30.0:
                 actual_cell.color = 'DANGER'
@@ -52,6 +52,9 @@ class CoinsIndicators(npyscreen.FormMuttActive):
         self.wMain.display()
         self.wStatus2.value = "search"
         self.update_title()
+        self.add_handlers({
+            "f": self.filter_toggle,
+        })
 
     def update_title(self, atime=None):
         title = "coin indicators board (%s)" % REFERENCE_CURRENCY
@@ -86,7 +89,7 @@ class CoinsIndicators(npyscreen.FormMuttActive):
             searched_markets_string = "%".join(self.searched_markets.keys())
             markets = dict(filter(lambda market: market[0] in searched_markets_string, markets.items()))
 
-        grid_values = [[market, indicators["rsi"], indicators["macd-trend"]]
+        grid_values = [[market, indicators["rsi"], indicators["macd-trend"], indicators["adx-trend"]]
                        for market, indicators in markets.items()]
         sorted_grid_values = sorted(grid_values, key=operator.itemgetter(1))
 
@@ -100,8 +103,4 @@ class CoinsIndicators(npyscreen.FormMuttActive):
     def filter_toggle(self, *args, **keywords):
         self.filter = not self.filter
 
-    def manage_coin(self, *args, **keywords):
-        self.parentApp.getForm('MANAGECOINFM').currency = self.coin_values[self.wMain.edit_cell[0]][0]
-        self.parentApp.getForm('MANAGECOINFM').set_current_value(self.coin_values[self.wMain.edit_cell[0]][1])
-        self.parentApp.switchForm('MANAGECOINFM')
 

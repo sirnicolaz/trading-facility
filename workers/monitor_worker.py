@@ -10,13 +10,13 @@ def get_file_path(coin, indicator):
 
 def update_coin(coin, connection):
     updates = {"market": "BTC-" + coin}
-    indicators = ["rsi", "macd-trend"]
+    indicators = ["rsi", "macd-trend", "adx-trend"]
 
     for indicator in indicators:
         if os.path.isfile(get_file_path(coin, indicator)):
             with open(get_file_path(coin, indicator), "r") as value:
-                rsi_value = value.read()
-                updates.update({indicator: rsi_value})
+                value = value.read()
+                updates.update({indicator: value})
         else:
             updates.update({indicator: None})
 

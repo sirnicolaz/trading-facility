@@ -53,8 +53,8 @@ In order to start it:
 ```bash
 python run_tracker.py <indicator 1> <indicator 2>
 ```
-So far only `rsi` and `macd_trend` trend are supported
-
+So far only `rsi`, `macd_trend` and `adx_trend` are supported.
+You can throw the process to background if it bothers.
 # Monitoring dashboard
 This will show full console screen the technical indicators for each coin.
 To start it:
