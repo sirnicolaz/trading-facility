@@ -1,5 +1,5 @@
 import argparse
-import start_cui, start_monitor, run_tracker
+import start_cui, start_monitor, start_tracker, start_proxy
 
 
 parser = argparse.ArgumentParser(description='Trading facility.')
@@ -20,6 +20,9 @@ parser_tracker = subparsers.add_parser('tracker', help="runs ta trackers")
 supported_indicators = ["rsi", "macd_trend", "adx_trend"]
 parser_tracker.add_argument('--indicators', '-i', type=str, nargs="*", choices=supported_indicators)
 
+parser_proxy = subparsers.add_parser('proxy', help="runs the bittrex proxy (to support conditional orders.")
+parser_proxy.add_argument('--cookies-file', '-c', type=str, help="path to the authenticated cookies file")
+
 args = parser.parse_args()
 
 if args.command == "cui":
@@ -29,6 +32,8 @@ if args.command == "cui":
     }[args.type].run()
 elif args.command == "tracker":
     trackers = args.indicators if args.indicators else supported_indicators
-    run_tracker.run(trackers)
+    start_tracker.run(trackers)
+elif args.command == "proxy":
+    start_proxy.run(args.cookies_file)
 else:
     parser.print_usage()

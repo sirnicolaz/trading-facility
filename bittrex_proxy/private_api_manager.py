@@ -14,7 +14,7 @@ def __add_default_headers(request):
     request.add_header('Connection', 'keep-alive')
 
 
-def request_handling_loop(queue):
+def request_handling_loop(queue, cookies_file):
     while True:
         # read next request from queue
         data = queue.get()
@@ -24,7 +24,7 @@ def request_handling_loop(queue):
         response_pipe = data['response_pipe'] if 'response_pipe' in data else None
 
         q = Request(url)
-        cookies = cookie_store.get_private_api_cookie()
+        cookies = cookie_store.get_private_api_cookie(cookies_file)
         q.add_header('Cookie', cookies)
         q.add_header('Accept', accept)
 
@@ -52,7 +52,7 @@ def request_handling_loop(queue):
                 time.sleep(2)
 
         if response is not None:
-            cookie_store.update_private_api_cookie(response.headers["Set-Cookie"])
+            cookie_store.update_private_api_cookie(response.headers["Set-Cookie"], cookies_file)
             data = response.read()
         else:
             data = None

@@ -30,11 +30,11 @@ def is_alive():
     return jsonify({"alive": private_api.is_alive()})
 
 
-def start():
+def start(authenticated_cookies_file):
     # Hack to use the private APIs that provide conditional orders
     queue = Queue()
     bittrex_proxy.private_api.set_queue(queue)
-    request_handler = Thread(target=request_handling_loop, args=(queue,))
+    request_handler = Thread(target=request_handling_loop, args=(queue, authenticated_cookies_file))
     keep_alive_handler = Thread(target=keep_alive_loop)
     request_handler.start()
     keep_alive_handler.start()

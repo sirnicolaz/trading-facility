@@ -1,17 +1,14 @@
-COOKIES_FILE="cookies.txt"
-
-
-def get_private_api_cookie():
-    file = open(COOKIES_FILE, "r")
+def get_private_api_cookie(cookies_file):
+    file = open(cookies_file, "r")
     cookie = file.read().replace('\n', '')
     file.close()
 
     return cookie
 
 
-def update_private_api_cookie(set_cookie_header):
+def update_private_api_cookie(set_cookie_header, cookies_file):
     if set_cookie_header is not None:
-        with open(COOKIES_FILE, "r+") as cookie_file:
+        with open(cookies_file, "r+") as cookie_file:
             cookie = cookie_file.read()
             cookie_file.seek(0)
 
