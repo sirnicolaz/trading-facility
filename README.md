@@ -45,5 +45,23 @@ python start_cui.py
 New orders will not be immediately visible in the interface, due to caching. If you are in a rush, just
 restart it.
 
+# TA tracking bots
+In order to have data for the ta **monitor dashboard**, one need to start the tracking bots separately.
+They will go through all the existing currencies (on BITTREX) and calculate different technical indicators.
+
+In order to start it:
+```bash
+python run_tracker.py <indicator 1> <indicator 2>
+```
+So far only `rsi` and `macd_trend` trend are supported
+
+# Monitoring dashboard
+This will show full console screen the technical indicators for each coin.
+You can use the search bar to filter those that you want to see. Like:
+```bash
+ADX MUSIC ETH
+```
+Just put a space between each. Press `enter` to reset.
+
 # Bots
 TODO. You can try to figure it out yourself in the meantime by looking at `run_bot.py`
